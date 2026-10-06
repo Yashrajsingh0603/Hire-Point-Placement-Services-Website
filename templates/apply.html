@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block title %}Apply for Job | HireHub{% endblock %}
+
+{% block content %}
+
+<style>
+    .apply-page {
+        max-width: 850px;
+        margin: 50px auto;
+        padding: 0 20px 70px;
+    }
+
+    .apply-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .apply-header h1 {
+        font-size: 36px;
+        color: #111827;
+        margin-bottom: 10px;
+    }
+
+    .apply-header p {
+        color: #667085;
+    }
+
+    .apply-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 18px;
+        padding: 35px;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.07);
+    }
+
+    .job-summary {
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    .job-summary h2 {
+        margin: 0 0 8px;
+        color: #111827;
+        font-size: 22px;
+    }
+
+    .job-summary p {
+        margin: 5px 0;
+        color: #667085;
+    }
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 13px 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 9px;
+        font-family: inherit;
+        font-size: 14px;
+        outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
+    }
+
+    .form-group input[readonly] {
+        background: #f3f4f6;
+        color: #4b5563;
+    }
+
+    .form-group textarea {
+        min-height: 220px;
+        resize: vertical;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 9px;
+        background: #2563eb;
+        color: white;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .submit-btn:hover {
+        background: #1d4ed8;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 15px;
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+        .apply-card {
+            padding: 25px 20px;
+        }
+
+        .apply-header h1 {
+            font-size: 29px;
+        }
+    }
+</style>
+
+<div class="apply-page">
+
+    <div class="apply-header">
+        <h1>Apply for This Job</h1>
+        <p>Submit your application and take the next step in your career.</p>
+    </div>
+
+    <div class="apply-card">
+
+        <div class="job-summary">
+            <h2>{{ job[1] }}</h2>
+            <p><strong>Company:</strong> {{ job[2] }}</p>
+            <p><strong>Location:</strong> {{ job[3] }}</p>
+            <p><strong>Job Type:</strong> {{ job[4] }}</p>
+        </div>
+
+        <form method="POST">
+
+            <div class="form-group">
+                <label for="name">Your Name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    value="{{ session.get('user_name') }}"
+                    readonly
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    value="{{ session.get('user_email') }}"
+                    readonly
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="cover_letter">Cover Letter</label>
+
+                <textarea
+                    id="cover_letter"
+                    name="cover_letter"
+                    placeholder="Write a short cover letter explaining why you are suitable for this position..."
+                    required
+                ></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                🚀 Submit Application
+            </button>
+
+        </form>
+
+        <a href="{{ url_for('jobs') }}" class="back-link">
+            ← Back to Jobs
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

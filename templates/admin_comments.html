@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Comments - HireHub{% endblock %}
+
+{% block content %}
+
+<div class="container" style="max-width:1100px; margin:50px auto;">
+
+    <h1>Manage Comments</h1>
+
+    <p>View and manage user feedback.</p>
+
+    {% if comments %}
+
+    <table style="
+        width:100%;
+        border-collapse:collapse;
+        margin-top:30px;
+    ">
+
+        <thead>
+            <tr>
+                <th style="padding:12px; border-bottom:1px solid #ddd;">User</th>
+                <th style="padding:12px; border-bottom:1px solid #ddd;">Email</th>
+                <th style="padding:12px; border-bottom:1px solid #ddd;">Comment</th>
+                <th style="padding:12px; border-bottom:1px solid #ddd;">Date</th>
+                <th style="padding:12px; border-bottom:1px solid #ddd;">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for comment in comments %}
+
+            <tr>
+
+                <td style="padding:12px;">
+                    {{ comment[1] }}
+                </td>
+
+                <td style="padding:12px;">
+                    {{ comment[2] }}
+                </td>
+
+                <td style="padding:12px;">
+                    {{ comment[3] }}
+                </td>
+
+                <td style="padding:12px;">
+                    {{ comment[4] }}
+                </td>
+
+                <td style="padding:12px;">
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('admin_delete_comment', comment_id=comment[0]) }}"
+                        onsubmit="return confirm('Delete this comment?');">
+
+                        <button type="submit">
+                            Delete
+                        </button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    {% else %}
+
+        <p>No comments available.</p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

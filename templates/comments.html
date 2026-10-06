@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Comments & Feedback - HireHub{% endblock %}
+
+{% block content %}
+
+<div class="container" style="max-width: 900px; margin: 50px auto;">
+
+    <h1>Comments & Feedback</h1>
+
+    <p>Share your feedback with HireHub.</p>
+
+    <form method="POST"
+          style="margin: 30px 0;">
+
+        <textarea
+            name="comment"
+            placeholder="Write your comment or feedback..."
+            required
+            style="width:100%; min-height:140px; padding:15px;">
+        </textarea>
+
+        <button type="submit"
+                style="margin-top:15px; padding:12px 25px;">
+            Post Comment
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h2>User Comments</h2>
+
+    {% if comments %}
+
+        {% for comment in comments %}
+
+        <div style="
+            margin-top:20px;
+            padding:20px;
+            border:1px solid #ddd;
+            border-radius:12px;
+        ">
+
+            <strong>{{ comment[1] }}</strong>
+
+            <small style="color:#777;">
+                {{ comment[3] }}
+            </small>
+
+            <p>{{ comment[2] }}</p>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No comments yet.</p>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

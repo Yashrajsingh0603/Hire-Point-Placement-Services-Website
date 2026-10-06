@@ -1,0 +1,462 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- =========================
+     JOBS HEADER
+========================= -->
+
+<section class="jobs-page-header">
+
+    <p class="small-heading">
+        EXPLORE OPPORTUNITIES
+    </p>
+
+    <h1>
+        Find Your Next Job
+    </h1>
+
+    <p>
+        Search and discover opportunities from companies hiring on HireHub.
+    </p>
+
+</section>
+
+
+<!-- =========================
+     JOBS CONTENT
+========================= -->
+
+<section class="jobs-page-container">
+
+
+    <!-- =========================
+         SEARCH
+    ========================= -->
+
+    <form
+        action="{{ url_for('jobs') }}"
+        method="GET"
+        class="search-box jobs-page-search"
+    >
+
+        <div class="search-input">
+
+            <span>🔎</span>
+
+            <input
+                type="text"
+                name="keyword"
+                placeholder="Job title, skills or keyword"
+                value="{{ keyword }}"
+            >
+
+        </div>
+
+
+        <div class="search-input">
+
+            <span>📍</span>
+
+            <input
+                type="text"
+                name="location"
+                placeholder="Location"
+                value="{{ location }}"
+            >
+
+        </div>
+
+
+        <button type="submit">
+            Search Jobs
+        </button>
+
+    </form>
+
+
+    <!-- =========================
+         SEARCH RESULT
+    ========================= -->
+
+    {% if keyword or location %}
+
+    <div class="search-result-message">
+
+        <strong>
+            Search Results
+        </strong>
+
+
+        {% if keyword %}
+
+        <span>
+            Keyword: "{{ keyword }}"
+        </span>
+
+        {% endif %}
+
+
+        {% if location %}
+
+        <span>
+            Location: "{{ location }}"
+        </span>
+
+        {% endif %}
+
+
+        <a href="{{ url_for('jobs') }}">
+            Clear Search
+        </a>
+
+    </div>
+
+    {% endif %}
+
+
+
+    <!-- =========================
+         JOB COUNT
+    ========================= -->
+
+    <div class="section-header">
+
+        <div>
+
+            <p class="small-heading">
+                AVAILABLE POSITIONS
+            </p>
+
+            <h2>
+                {{ jobs|length }} Jobs Found
+            </h2>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('home') }}"
+            class="view-all-btn"
+        >
+            ← Back to Home
+        </a>
+
+    </div>
+
+
+
+    <!-- =========================
+         JOB CARDS
+    ========================= -->
+
+    <div class="jobs-grid">
+
+        {% for job in jobs %}
+
+
+        <div class="job-card">
+
+
+            <!-- =========================
+                 JOB CARD TOP
+            ========================= -->
+
+            <div class="job-card-top">
+
+                <div class="company-logo">
+
+                    {{ job[2][0]|upper if job[2] else 'C' }}
+
+                </div>
+
+
+                <div class="job-title-area">
+
+                    <h3>
+                        {{ job[1] }}
+                    </h3>
+
+                    <p class="company-name">
+                        {{ job[2] }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 JOB DETAILS
+            ========================= -->
+
+            <div class="job-details">
+
+
+                {% if job[3] %}
+
+                <span>
+                    📍 {{ job[3] }}
+                </span>
+
+                {% endif %}
+
+
+                {% if job[4] %}
+
+                <span>
+                    💼 {{ job[4] }}
+                </span>
+
+                {% endif %}
+
+
+                {% if job[8] %}
+
+                <span>
+                    🎯 {{ job[8] }}
+                </span>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- =========================
+                 SKILLS
+            ========================= -->
+
+            {% if job[7] %}
+
+            <div class="job-skills">
+
+                {% for skill in job[7].split(',') %}
+
+                    {% if skill.strip() %}
+
+                    <span>
+                        {{ skill.strip() }}
+                    </span>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- =========================
+                 DESCRIPTION
+            ========================= -->
+
+            {% if job[9] %}
+
+            <p
+                style="
+                    color:#667085;
+                    font-size:13px;
+                    margin-bottom:18px;
+                    line-height:1.6;
+                "
+            >
+
+                {{ job[9][:180] }}
+
+                {% if job[9]|length > 180 %}
+                    ...
+                {% endif %}
+
+            </p>
+
+            {% endif %}
+
+
+
+            <!-- =========================
+                 SALARY
+            ========================= -->
+
+            <div class="job-bottom">
+
+                <div class="salary">
+
+
+                    {% if job[5] and job[6] %}
+
+                        ₹{{ (job[5] / 100000)|round(1) }}L -
+                        ₹{{ (job[6] / 100000)|round(1) }}L
+
+
+                    {% elif job[5] %}
+
+                        ₹{{ (job[5] / 100000)|round(1) }}L+
+
+
+                    {% else %}
+
+                        Salary not disclosed
+
+                    {% endif %}
+
+                </div>
+
+
+                <span class="job-time">
+                    Recently posted
+                </span>
+
+            </div>
+
+
+
+            <!-- =========================
+                 APPLY BUTTON
+            ========================= -->
+
+            <div style="margin-top:20px;">
+
+
+                {% if session.get("user_id") %}
+
+
+                    <!-- LOGGED-IN USER -->
+
+                    <a
+                        href="{{ url_for('apply_job', job_id=job[0]) }}"
+                        class="register-btn"
+                        style="
+                            display:block;
+                            text-align:center;
+                            width:100%;
+                            box-sizing:border-box;
+                        "
+                    >
+                        Apply Now →
+                    </a>
+
+
+                {% else %}
+
+
+                    <!-- NOT LOGGED-IN -->
+
+                    <a
+                        href="{{ url_for('login') }}"
+                        class="register-btn"
+                        style="
+                            display:block;
+                            text-align:center;
+                            width:100%;
+                            box-sizing:border-box;
+                        "
+                    >
+                        Login to Apply
+                    </a>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- =========================
+             NO JOBS
+        ========================= -->
+
+        <div class="no-jobs">
+
+            <div class="no-jobs-icon">
+                🔍
+            </div>
+
+
+            <h3>
+                No Jobs Found
+            </h3>
+
+
+            <p>
+                We couldn't find any jobs matching your search.
+                Try another keyword or location.
+            </p>
+
+
+            <a href="{{ url_for('jobs') }}">
+                View All Jobs
+            </a>
+
+        </div>
+
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     CTA SECTION
+========================= -->
+
+<section class="cta-section">
+
+    <div class="cta-content">
+
+
+        <p class="small-heading">
+            START YOUR CAREER
+        </p>
+
+
+        <h2>
+            Your next opportunity
+            is waiting.
+        </h2>
+
+
+        <p>
+            Create your HireHub account and discover
+            exciting career opportunities.
+        </p>
+
+
+        <div class="cta-buttons">
+
+
+            <a
+                href="{{ url_for('register') }}"
+                class="register-btn"
+            >
+                Create Account
+            </a>
+
+
+            <a
+                href="{{ url_for('login') }}"
+                class="login-btn"
+            >
+                Sign In
+            </a>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

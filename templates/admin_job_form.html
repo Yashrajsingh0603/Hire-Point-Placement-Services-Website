@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% if job %}
+            Edit Job | HireHub
+        {% else %}
+            Add Job | HireHub
+        {% endif %}
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            min-height: 72px;
+            background: #ffffff;
+            border-bottom: 1px solid #e6eaf0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #2563eb;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #596579;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+            background: #eef2f7;
+            color: #374151;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* MAIN */
+
+        .form-page {
+            max-width: 900px;
+            margin: auto;
+            padding: 45px 22px 70px;
+        }
+
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 34px;
+        }
+
+        .page-header p {
+            margin: 8px 0 0;
+            color: #667085;
+            font-size: 14px;
+        }
+
+        /* FORM CARD */
+
+        .form-card {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 17px;
+            padding: 32px;
+            box-shadow: 0 8px 25px rgba(20,35,60,0.05);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            margin: 0 0 5px;
+            font-size: 18px;
+        }
+
+        .form-section p {
+            margin: 0 0 20px;
+            color: #667085;
+            font-size: 13px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #344054;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid #d0d5dd;
+            border-radius: 9px;
+            padding: 12px 13px;
+            font-family: inherit;
+            font-size: 14px;
+            color: #172033;
+            outline: none;
+            background: #ffffff;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .hint {
+            display: block;
+            margin-top: 6px;
+            color: #98a2b3;
+            font-size: 11px;
+        }
+
+        /* BUTTONS */
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #edf0f4;
+        }
+
+        .submit-btn,
+        .cancel-btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .submit-btn {
+            border: none;
+            background: #2563eb;
+            color: #ffffff;
+        }
+
+        .submit-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .cancel-btn {
+            background: #f1f5f9;
+            color: #475467;
+        }
+
+        .cancel-btn:hover {
+            background: #e2e8f0;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #172033;
+            color: #aeb8c8;
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+        }
+
+        footer strong {
+            color: #ffffff;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 15px 20px;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                overflow-x: auto;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .form-card {
+                padding: 22px;
+            }
+
+            .page-header h1 {
+                font-size: 29px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .submit-btn,
+            .cancel-btn {
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <div class="logo">
+        Hire<span>Hub</span>
+    </div>
+
+
+    <nav class="nav-links">
+
+        <a href="/admin/dashboard">
+            Dashboard
+        </a>
+
+        <a href="/admin/users">
+            Users
+        </a>
+
+        <a href="/admin/applications">
+            Applications
+        </a>
+
+        <a href="/admin/jobs">
+            Jobs
+        </a>
+
+        <a href="/">
+            Website
+        </a>
+
+    </nav>
+
+
+    <a href="/logout" class="logout-btn">
+        Logout
+    </a>
+
+</header>
+
+
+<!-- MAIN -->
+
+<main class="form-page">
+
+
+    <section class="page-header">
+
+        <div class="eyebrow">
+            ADMINISTRATION
+        </div>
+
+        <h1>
+            {% if job %}
+                Edit Job
+            {% else %}
+                Create New Job
+            {% endif %}
+        </h1>
+
+        <p>
+            {% if job %}
+                Update the details of this job posting.
+            {% else %}
+                Add a new opportunity to HireHub.
+            {% endif %}
+        </p>
+
+    </section>
+
+
+    <!-- FORM -->
+
+    <section class="form-card">
+
+        <form method="POST">
+
+
+            <!-- BASIC INFORMATION -->
+
+            <div class="form-section">
+
+                <h2>
+                    Job Information
+                </h2>
+
+                <p>
+                    Enter the basic details of the position.
+                </p>
+
+
+                <div class="form-grid">
+
+
+                    <!-- COMPANY -->
+
+                    <div class="form-group">
+
+                        <label for="company_id">
+                            Company *
+                        </label>
+
+                        <select
+                            id="company_id"
+                            name="company_id"
+                            required
+                        >
+
+                            <option value="">
+                                Select Company
+                            </option>
+
+                            {% for company in companies %}
+
+                            <option
+                                value="{{ company[0] }}"
+                                {% if job and job[1] == company[0] %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ company[1] }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- TITLE -->
+
+                    <div class="form-group">
+
+                        <label for="title">
+                            Job Title *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            placeholder="e.g. Full Stack Developer"
+                            value="{{ job[2] if job else '' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- LOCATION -->
+
+                    <div class="form-group">
+
+                        <label for="location">
+                            Location *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="location"
+                            name="location"
+                            placeholder="e.g. Gurugram, Haryana"
+                            value="{{ job[4] if job else '' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- JOB TYPE -->
+
+                    <div class="form-group">
+
+                        <label for="job_type">
+                            Job Type *
+                        </label>
+
+                        <select
+                            id="job_type"
+                            name="job_type"
+                            required
+                        >
+
+                            <option value="">
+                                Select Job Type
+                            </option>
+
+                            {% for type in [
+                                'Full Time',
+                                'Part Time',
+                                'Internship',
+                                'Contract',
+                                'Remote'
+                            ] %}
+
+                            <option
+                                value="{{ type }}"
+                                {% if job and job[5] == type %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ type }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- SALARY -->
+
+            <div class="form-section">
+
+                <h2>
+                    Salary & Experience
+                </h2>
+
+                <p>
+                    Add compensation and experience requirements.
+                </p>
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="salary_min">
+                            Minimum Salary (₹)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="salary_min"
+                            name="salary_min"
+                            placeholder="e.g. 400000"
+                            value="{{ job[6] if job and job[6] else '' }}"
+                        >
+
+                        <span class="hint">
+                            Example: ₹4,00,000
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="salary_max">
+                            Maximum Salary (₹)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="salary_max"
+                            name="salary_max"
+                            placeholder="e.g. 700000"
+                            value="{{ job[7] if job and job[7] else '' }}"
+                        >
+
+                        <span class="hint">
+                            Example: ₹7,00,000
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-group full-width">
+
+                        <label for="experience">
+                            Experience Required
+                        </label>
+
+                        <input
+                            type="text"
+                            id="experience"
+                            name="experience"
+                            placeholder="e.g. 0-2 years"
+                            value="{{ job[8] if job else '' }}"
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-section">
+
+                <h2>
+                    Job Details
+                </h2>
+
+                <p>
+                    Describe the position and required skills.
+                </p>
+
+
+                <div class="form-group">
+
+                    <label for="description">
+                        Job Description *
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Describe the role, responsibilities and requirements..."
+                        required
+                    >{{ job[3] if job else '' }}</textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="skills">
+                        Skills
+                    </label>
+
+                    <input
+                        type="text"
+                        id="skills"
+                        name="skills"
+                        placeholder="e.g. HTML, CSS, JavaScript, Python, Flask"
+                        value="{{ job[9] if job else '' }}"
+                    >
+
+                    <span class="hint">
+                        Separate multiple skills with commas.
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                >
+
+                    {% if job %}
+                        Update Job
+                    {% else %}
+                        Publish Job
+                    {% endif %}
+
+                </button>
+
+
+                <a
+                    href="/admin/jobs"
+                    class="cancel-btn"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+
+        </form>
+
+    </section>
+
+
+</main>
+
+
+<footer>
+
+    <strong>HireHub</strong>
+    — Administration Panel
+
+</footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,479 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- =====================================================
+                     HERO SECTION
+====================================================== -->
+
+<section class="hero-section">
+
+    <div class="hero-content">
+
+        <p class="small-heading">
+            FIND YOUR NEXT OPPORTUNITY
+        </p>
+
+        <h1>
+            Find a job you
+            <span>love.</span>
+        </h1>
+
+        <p class="hero-text">
+            Discover thousands of job opportunities from leading companies
+            and take the next step in your career.
+        </p>
+
+
+        <!-- SEARCH -->
+
+        <form
+            action="{{ url_for('home') }}"
+            method="GET"
+            class="search-box"
+        >
+
+            <div class="search-input">
+
+                <span>🔎</span>
+
+                <input
+                    type="text"
+                    name="keyword"
+                    placeholder="Job title, skills or keyword"
+                    value="{{ request.args.get('keyword', '') }}"
+                >
+
+            </div>
+
+
+            <div class="search-input">
+
+                <span>📍</span>
+
+                <input
+                    type="text"
+                    name="location"
+                    placeholder="Location"
+                    value="{{ request.args.get('location', '') }}"
+                >
+
+            </div>
+
+
+            <button type="submit">
+                Search Jobs
+            </button>
+
+        </form>
+
+
+        <!-- POPULAR SEARCHES -->
+
+        <div class="popular-searches">
+
+            <span>Popular:</span>
+
+            <a href="{{ url_for('home') }}?keyword=Python">
+                Python
+            </a>
+
+            <a href="{{ url_for('home') }}?keyword=Java">
+                Java
+            </a>
+
+            <a href="{{ url_for('home') }}?keyword=React">
+                React
+            </a>
+
+            <a href="{{ url_for('home') }}?keyword=Data%20Science">
+                Data Science
+            </a>
+
+            <a href="{{ url_for('home') }}?keyword=Machine%20Learning">
+                Machine Learning
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+                     STATISTICS
+====================================================== -->
+
+<section class="stats-section">
+
+    <div class="stat-card">
+
+        <h2>
+            {{ user_count }}+
+        </h2>
+
+        <p>
+            Registered Users
+        </p>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <h2>
+            {{ jobs|length }}+
+        </h2>
+
+        <p>
+            Active Jobs
+        </p>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <h2>
+            100+
+        </h2>
+
+        <p>
+            Companies
+        </p>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <h2>
+            95%
+        </h2>
+
+        <p>
+            Success Rate
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+                     JOBS SECTION
+====================================================== -->
+
+<section class="jobs-section">
+
+
+    <div class="section-header">
+
+        <div>
+
+            <p class="small-heading">
+                LATEST OPPORTUNITIES
+            </p>
+
+            <h2>
+                Featured Jobs
+            </h2>
+
+            <p>
+                Explore the latest job opportunities available on HireHub.
+            </p>
+
+        </div>
+
+
+        <!-- ADMIN ONLY -->
+
+        {% if session.get('user_role') == 'admin' %}
+
+        <a
+            href="{{ url_for('admin_jobs') }}"
+            class="view-all-btn"
+        >
+            Manage Jobs →
+        </a>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- =====================================================
+                    SEARCH RESULT MESSAGE
+    ====================================================== -->
+
+    {% if request.args.get('keyword') or request.args.get('location') %}
+
+    <div class="search-result-message">
+
+        <strong>
+            Search Results
+        </strong>
+
+
+        {% if request.args.get('keyword') %}
+
+        <span>
+            Keyword:
+            "{{ request.args.get('keyword') }}"
+        </span>
+
+        {% endif %}
+
+
+        {% if request.args.get('location') %}
+
+        <span>
+            Location:
+            "{{ request.args.get('location') }}"
+        </span>
+
+        {% endif %}
+
+    </div>
+
+    {% endif %}
+
+
+
+    <!-- =====================================================
+                         JOB CARDS
+    ====================================================== -->
+
+    <div class="jobs-grid">
+
+
+        {% for job in jobs %}
+
+
+        <div class="job-card">
+
+
+            <!-- JOB TOP -->
+
+            <div class="job-card-top">
+
+
+                <div class="company-logo">
+
+                    {{ job[1][0]|upper if job[1] else 'C' }}
+
+                </div>
+
+
+                <div class="job-title-area">
+
+                    <h3>
+                        {{ job[0] }}
+                    </h3>
+
+
+                    <p class="company-name">
+                        {{ job[1] }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- JOB DETAILS -->
+
+            <div class="job-details">
+
+
+                {% if job[2] %}
+
+                <span>
+                    📍 {{ job[2] }}
+                </span>
+
+                {% endif %}
+
+
+                {% if job[3] %}
+
+                <span>
+                    💼 {{ job[3] }}
+                </span>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- SKILLS -->
+
+            {% if job[6] %}
+
+            <div class="job-skills">
+
+
+                {% for skill in job[6].split(',') %}
+
+
+                    {% if skill.strip() %}
+
+                    <span>
+                        {{ skill.strip() }}
+                    </span>
+
+                    {% endif %}
+
+
+                {% endfor %}
+
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- SALARY -->
+
+            <div class="job-bottom">
+
+
+                <div class="salary">
+
+
+                    {% if job[4] and job[5] %}
+
+                        ₹{{ (job[4] / 100000)|round(1) }}L -
+                        ₹{{ (job[5] / 100000)|round(1) }}L
+
+
+                    {% elif job[4] %}
+
+                        ₹{{ (job[4] / 100000)|round(1) }}L+
+
+
+                    {% else %}
+
+                        Salary not disclosed
+
+                    {% endif %}
+
+
+                </div>
+
+
+                <span class="job-time">
+                    Recently posted
+                </span>
+
+
+            </div>
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- =====================================================
+                            NO JOBS
+        ====================================================== -->
+
+        <div class="no-jobs">
+
+
+            <div class="no-jobs-icon">
+                💼
+            </div>
+
+
+            <h3>
+                No jobs found
+            </h3>
+
+
+            <p>
+                We couldn't find any jobs matching your search.
+                Try another keyword or location.
+            </p>
+
+
+            <a href="{{ url_for('home') }}">
+                View All Jobs
+            </a>
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+                         CTA SECTION
+====================================================== -->
+
+<section class="cta-section">
+
+
+    <div class="cta-content">
+
+
+        <p class="small-heading">
+            READY FOR YOUR NEXT MOVE?
+        </p>
+
+
+        <h2>
+            Your next opportunity
+            starts here.
+        </h2>
+
+
+        <p>
+            Create your HireHub account and start exploring
+            exciting career opportunities today.
+        </p>
+
+
+        <div class="cta-buttons">
+
+
+            <a
+                href="{{ url_for('register') }}"
+                class="register-btn"
+            >
+                Create Account
+            </a>
+
+
+            <a
+                href="{{ url_for('login') }}"
+                class="login-btn"
+            >
+                Sign In
+            </a>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

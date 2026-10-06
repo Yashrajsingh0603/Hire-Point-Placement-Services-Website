@@ -1,0 +1,474 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}HireHub Job Portal{% endblock %}
+    </title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+                         NAVBAR
+    ====================================================== -->
+
+    <header class="navbar">
+
+        <div class="navbar-container">
+
+
+            <!-- ================= LOGO ================= -->
+
+            <a href="{{ url_for('home') }}"
+               class="logo">
+
+                <span class="logo-icon">
+                    H
+                </span>
+
+                <span>
+
+                    HireHub
+
+                    <span class="logo-highlight">
+                        Job Portal
+                    </span>
+
+                </span>
+
+            </a>
+
+
+            <!-- ================= DESKTOP NAVIGATION ================= -->
+
+            <nav class="nav-links">
+
+
+                <!-- PUBLIC LINKS -->
+
+                <a href="{{ url_for('home') }}">
+                    Home
+                </a>
+
+
+                <a href="{{ url_for('jobs') }}">
+                    Jobs
+                </a>
+
+
+                <!-- ================= LOGGED-IN USER ================= -->
+
+                {% if session.get('user_id') %}
+
+
+                    <!-- Comments only visible after login -->
+
+                    <a href="{{ url_for('comments') }}">
+                        Comments
+                    </a>
+
+
+                    <!-- ================= ADMIN ================= -->
+
+                    {% if session.get('user_role') == 'admin' %}
+
+
+                        <a href="{{ url_for('admin_dashboard') }}">
+                            Dashboard
+                        </a>
+
+
+                        <a href="{{ url_for('admin_comments') }}">
+                            Manage Comments
+                        </a>
+
+
+                    <!-- ================= NORMAL USER ================= -->
+
+                    {% else %}
+
+
+                        <a href="{{ url_for('home') }}">
+                            Dashboard
+                        </a>
+
+
+                    {% endif %}
+
+
+                    <!-- LOGOUT -->
+
+                    <a href="{{ url_for('logout') }}">
+                        Logout
+                    </a>
+
+
+                <!-- ================= PUBLIC USER ================= -->
+
+                {% else %}
+
+
+                    <a href="{{ url_for('login') }}">
+                        Login
+                    </a>
+
+
+                    <a href="{{ url_for('register') }}">
+                        Register
+                    </a>
+
+
+                {% endif %}
+
+
+            </nav>
+
+
+            <!-- ================= MOBILE MENU BUTTON ================= -->
+
+            <button
+                class="mobile-menu-btn"
+                type="button"
+                onclick="toggleMobileMenu()"
+                aria-label="Open menu">
+
+                ☰
+
+            </button>
+
+
+        </div>
+
+
+        <!-- =====================================================
+                         MOBILE NAVIGATION
+        ====================================================== -->
+
+        <div class="mobile-nav"
+             id="mobileNav">
+
+
+            <!-- PUBLIC LINKS -->
+
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
+
+
+            <a href="{{ url_for('jobs') }}">
+                Jobs
+            </a>
+
+
+            <!-- ================= LOGGED-IN USER ================= -->
+
+            {% if session.get('user_id') %}
+
+
+                <!-- Comments -->
+
+                <a href="{{ url_for('comments') }}">
+                    Comments
+                </a>
+
+
+                <!-- ================= ADMIN ================= -->
+
+                {% if session.get('user_role') == 'admin' %}
+
+
+                    <a href="{{ url_for('admin_dashboard') }}">
+                        Dashboard
+                    </a>
+
+
+                    <a href="{{ url_for('admin_comments') }}">
+                        Manage Comments
+                    </a>
+
+
+                <!-- ================= NORMAL USER ================= -->
+
+                {% else %}
+
+
+                    <a href="{{ url_for('home') }}">
+                        Dashboard
+                    </a>
+
+
+                {% endif %}
+
+
+                <!-- Logout -->
+
+                <a href="{{ url_for('logout') }}">
+                    Logout
+                </a>
+
+
+            <!-- ================= PUBLIC USER ================= -->
+
+            {% else %}
+
+
+                <a href="{{ url_for('login') }}">
+                    Login
+                </a>
+
+
+                <a href="{{ url_for('register') }}">
+                    Register
+                </a>
+
+
+            {% endif %}
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+                       FLASH MESSAGES
+    ====================================================== -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+
+        {% if messages %}
+
+
+            <div class="flash-container">
+
+
+                {% for category, message in messages %}
+
+
+                    <div class="flash-message {{ category }}">
+
+
+                        <span>
+                            {{ message }}
+                        </span>
+
+
+                        <button
+                            type="button"
+                            onclick="this.parentElement.remove()"
+                            aria-label="Close">
+
+                            ×
+
+                        </button>
+
+
+                    </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+        {% endif %}
+
+
+    {% endwith %}
+
+
+
+    <!-- =====================================================
+                         MAIN CONTENT
+    ====================================================== -->
+
+    <main>
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+
+
+    <!-- =====================================================
+                            FOOTER
+    ====================================================== -->
+
+    <footer class="site-footer">
+
+
+        <div class="footer-container">
+
+
+            <!-- ================= FOOTER BRAND ================= -->
+
+            <div class="footer-brand">
+
+
+                <div class="footer-logo">
+
+                    H
+
+                    <span>
+                        HireHub Job Portal
+                    </span>
+
+                </div>
+
+
+                <p>
+                    Connecting talented people with great
+                    career opportunities.
+                </p>
+
+
+            </div>
+
+
+
+            <!-- ================= FOOTER LINKS ================= -->
+
+            <div class="footer-links">
+
+
+                <!-- Public links -->
+
+                <a href="{{ url_for('home') }}">
+                    Home
+                </a>
+
+
+                <a href="{{ url_for('jobs') }}">
+                    Jobs
+                </a>
+
+
+                <!-- ================= LOGGED-IN USER ================= -->
+
+                {% if session.get('user_id') %}
+
+
+                    <a href="{{ url_for('comments') }}">
+                        Comments
+                    </a>
+
+
+                    <!-- ================= ADMIN ================= -->
+
+                    {% if session.get('user_role') == 'admin' %}
+
+
+                        <a href="{{ url_for('admin_dashboard') }}">
+                            Admin Dashboard
+                        </a>
+
+
+                        <a href="{{ url_for('admin_comments') }}">
+                            Manage Comments
+                        </a>
+
+
+                    {% endif %}
+
+
+                    <a href="{{ url_for('logout') }}">
+                        Logout
+                    </a>
+
+
+                <!-- ================= PUBLIC USER ================= -->
+
+                {% else %}
+
+
+                    <a href="{{ url_for('login') }}">
+                        Login
+                    </a>
+
+
+                    <a href="{{ url_for('register') }}">
+                        Register
+                    </a>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================= COPYRIGHT ================= -->
+
+        <div class="footer-bottom">
+
+
+            <p>
+
+                © 2026 HireHub Job Portal.
+                All rights reserved.
+
+            </p>
+
+
+        </div>
+
+
+    </footer>
+
+
+
+    <!-- =====================================================
+                         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="{{ url_for('static', filename='js/script.js') }}">
+    </script>
+
+
+    <script>
+
+        function toggleMobileMenu() {
+
+            const menu =
+                document.getElementById("mobileNav");
+
+
+            if (menu) {
+
+                menu.classList.toggle("active");
+
+            }
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
+```
