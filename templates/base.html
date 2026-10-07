@@ -1,474 +1,416 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>
-        {% block title %}HireHub Job Portal{% endblock %}
+        {% block title %}
+        Hire Point Placement Services
+        {% endblock %}
     </title>
 
+    <meta
+        name="description"
+        content="Hire Point Placement Services - Find jobs, connect with companies and build your career."
+    >
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
     <!-- Main CSS -->
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
 
+    {% block extra_css %}{% endblock %}
 </head>
-
 
 <body>
 
-
-    <!-- =====================================================
+<!-- =====================================================
                          NAVBAR
-    ====================================================== -->
+====================================================== -->
 
-    <header class="navbar">
+<header class="site-header">
 
-        <div class="navbar-container">
+    <div class="navbar-container">
 
+        <!-- LOGO -->
+        <a href="{{ url_for('home') }}" class="navbar-brand">
 
-            <!-- ================= LOGO ================= -->
+            <div class="brand-logo">
+                <img
+                    src="{{ url_for('static', filename='images/hirepoint-logo.png.jpeg') }}"
+                    alt="Hire Point Logo"
+                >
+            </div>
 
-            <a href="{{ url_for('home') }}"
-               class="logo">
+            <div class="brand-text">
+                <strong>HIRE POINT</strong>
+                <span>PLACEMENT SERVICES</span>
+            </div>
 
-                <span class="logo-icon">
-                    H
-                </span>
+        </a>
 
-                <span>
 
-                    HireHub
-
-                    <span class="logo-highlight">
-                        Job Portal
-                    </span>
-
-                </span>
-
-            </a>
-
-
-            <!-- ================= DESKTOP NAVIGATION ================= -->
-
-            <nav class="nav-links">
-
-
-                <!-- PUBLIC LINKS -->
-
-                <a href="{{ url_for('home') }}">
-                    Home
-                </a>
-
-
-                <a href="{{ url_for('jobs') }}">
-                    Jobs
-                </a>
-
-
-                <!-- ================= LOGGED-IN USER ================= -->
-
-                {% if session.get('user_id') %}
-
-
-                    <!-- Comments only visible after login -->
-
-                    <a href="{{ url_for('comments') }}">
-                        Comments
-                    </a>
-
-
-                    <!-- ================= ADMIN ================= -->
-
-                    {% if session.get('user_role') == 'admin' %}
-
-
-                        <a href="{{ url_for('admin_dashboard') }}">
-                            Dashboard
-                        </a>
-
-
-                        <a href="{{ url_for('admin_comments') }}">
-                            Manage Comments
-                        </a>
-
-
-                    <!-- ================= NORMAL USER ================= -->
-
-                    {% else %}
-
-
-                        <a href="{{ url_for('home') }}">
-                            Dashboard
-                        </a>
-
-
-                    {% endif %}
-
-
-                    <!-- LOGOUT -->
-
-                    <a href="{{ url_for('logout') }}">
-                        Logout
-                    </a>
-
-
-                <!-- ================= PUBLIC USER ================= -->
-
-                {% else %}
-
-
-                    <a href="{{ url_for('login') }}">
-                        Login
-                    </a>
-
-
-                    <a href="{{ url_for('register') }}">
-                        Register
-                    </a>
-
-
-                {% endif %}
-
-
-            </nav>
-
-
-            <!-- ================= MOBILE MENU BUTTON ================= -->
-
-            <button
-                class="mobile-menu-btn"
-                type="button"
-                onclick="toggleMobileMenu()"
-                aria-label="Open menu">
-
-                ☰
-
-            </button>
-
-
-        </div>
-
-
-        <!-- =====================================================
-                         MOBILE NAVIGATION
-        ====================================================== -->
-
-        <div class="mobile-nav"
-             id="mobileNav">
-
-
-            <!-- PUBLIC LINKS -->
+        <!-- DESKTOP NAVIGATION -->
+        <nav class="desktop-nav">
 
             <a href="{{ url_for('home') }}">
                 Home
             </a>
 
-
             <a href="{{ url_for('jobs') }}">
                 Jobs
             </a>
 
+            <a href="{{ url_for('home') }}#contact">
+                Contact
+            </a>
 
-            <!-- ================= LOGGED-IN USER ================= -->
 
             {% if session.get('user_id') %}
 
-
-                <!-- Comments -->
-
-                <a href="{{ url_for('comments') }}">
-                    Comments
-                </a>
-
-
-                <!-- ================= ADMIN ================= -->
-
-                {% if session.get('user_role') == 'admin' %}
-
+                {% if session.get('role') == 'admin' %}
 
                     <a href="{{ url_for('admin_dashboard') }}">
                         Dashboard
                     </a>
 
+                {% elif session.get('role') == 'employer' %}
 
-                    <a href="{{ url_for('admin_comments') }}">
-                        Manage Comments
+                    <a href="{{ url_for('employer_portal') }}">
+                        Dashboard
                     </a>
 
-
-                <!-- ================= NORMAL USER ================= -->
-
                 {% else %}
-
 
                     <a href="{{ url_for('home') }}">
                         Dashboard
                     </a>
 
-
                 {% endif %}
 
-
-                <!-- Logout -->
-
-                <a href="{{ url_for('logout') }}">
+                <a href="{{ url_for('logout') }}" class="nav-login">
                     Logout
                 </a>
 
-
-            <!-- ================= PUBLIC USER ================= -->
-
             {% else %}
 
-
-                <a href="{{ url_for('login') }}">
+                <a href="{{ url_for('login') }}" class="nav-login">
                     Login
                 </a>
 
-
-                <a href="{{ url_for('register') }}">
+                <a href="{{ url_for('register') }}" class="nav-register">
                     Register
                 </a>
 
+            {% endif %}
+
+        </nav>
+
+
+        <!-- MOBILE MENU BUTTON -->
+        <button
+            class="mobile-menu-button"
+            id="mobileMenuButton"
+            type="button"
+            aria-label="Open navigation menu"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+    </div>
+
+
+    <!-- MOBILE NAVIGATION -->
+    <div class="mobile-nav" id="mobileNav">
+
+        <a href="{{ url_for('home') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('jobs') }}">
+            Jobs
+        </a>
+
+        <a href="{{ url_for('home') }}#contact">
+            Contact
+        </a>
+
+        {% if session.get('user_id') %}
+
+            {% if session.get('role') == 'admin' %}
+
+                <a href="{{ url_for('admin_dashboard') }}">
+                    Dashboard
+                </a>
+
+            {% elif session.get('role') == 'employer' %}
+
+                <a href="{{ url_for('employer_portal') }}">
+                    Dashboard
+                </a>
 
             {% endif %}
 
+            <a href="{{ url_for('logout') }}">
+                Logout
+            </a>
 
-        </div>
+        {% else %}
 
-    </header>
+            <a href="{{ url_for('login') }}">
+                Login
+            </a>
 
-
-
-    <!-- =====================================================
-                       FLASH MESSAGES
-    ====================================================== -->
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-
-
-        {% if messages %}
-
-
-            <div class="flash-container">
-
-
-                {% for category, message in messages %}
-
-
-                    <div class="flash-message {{ category }}">
-
-
-                        <span>
-                            {{ message }}
-                        </span>
-
-
-                        <button
-                            type="button"
-                            onclick="this.parentElement.remove()"
-                            aria-label="Close">
-
-                            ×
-
-                        </button>
-
-
-                    </div>
-
-
-                {% endfor %}
-
-
-            </div>
-
+            <a href="{{ url_for('register') }}" class="mobile-register">
+                Register
+            </a>
 
         {% endif %}
 
+    </div>
 
-    {% endwith %}
-
-
-
-    <!-- =====================================================
-                         MAIN CONTENT
-    ====================================================== -->
-
-    <main>
-
-        {% block content %}
-
-        {% endblock %}
-
-    </main>
+</header>
 
 
+<!-- =====================================================
+                      FLASH MESSAGES
+====================================================== -->
 
-    <!-- =====================================================
-                            FOOTER
-    ====================================================== -->
+{% with messages = get_flashed_messages(with_categories=true) %}
 
-    <footer class="site-footer">
+    {% if messages %}
+
+        <div class="flash-container">
+
+            {% for category, message in messages %}
+
+                <div class="flash-message {{ category }}">
+
+                    <span>
+                        {{ message }}
+                    </span>
+
+                    <button
+                        type="button"
+                        onclick="this.parentElement.remove()"
+                        aria-label="Close message"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endwith %}
 
 
-        <div class="footer-container">
+<!-- =====================================================
+                       PAGE CONTENT
+====================================================== -->
+
+<main>
+
+    {% block content %}
+    {% endblock %}
+
+</main>
 
 
-            <!-- ================= FOOTER BRAND ================= -->
+<!-- =====================================================
+                         FOOTER
+====================================================== -->
+
+<footer class="site-footer">
+
+    <div class="footer-container">
+
+
+        <!-- BRAND -->
+        <div class="footer-column footer-brand-column">
 
             <div class="footer-brand">
 
-
                 <div class="footer-logo">
 
-                    H
+                    <img
+                        src="{{ url_for('static', filename='images/hirepoint-logo.png.jpeg') }}"
+                        alt="Hire Point Logo"
+                    >
+
+                </div>
+
+                <div>
+
+                    <h3>HIRE POINT</h3>
 
                     <span>
-                        HireHub Job Portal
+                        PLACEMENT SERVICES
                     </span>
 
                 </div>
 
-
-                <p>
-                    Connecting talented people with great
-                    career opportunities.
-                </p>
-
-
             </div>
-
-
-
-            <!-- ================= FOOTER LINKS ================= -->
-
-            <div class="footer-links">
-
-
-                <!-- Public links -->
-
-                <a href="{{ url_for('home') }}">
-                    Home
-                </a>
-
-
-                <a href="{{ url_for('jobs') }}">
-                    Jobs
-                </a>
-
-
-                <!-- ================= LOGGED-IN USER ================= -->
-
-                {% if session.get('user_id') %}
-
-
-                    <a href="{{ url_for('comments') }}">
-                        Comments
-                    </a>
-
-
-                    <!-- ================= ADMIN ================= -->
-
-                    {% if session.get('user_role') == 'admin' %}
-
-
-                        <a href="{{ url_for('admin_dashboard') }}">
-                            Admin Dashboard
-                        </a>
-
-
-                        <a href="{{ url_for('admin_comments') }}">
-                            Manage Comments
-                        </a>
-
-
-                    {% endif %}
-
-
-                    <a href="{{ url_for('logout') }}">
-                        Logout
-                    </a>
-
-
-                <!-- ================= PUBLIC USER ================= -->
-
-                {% else %}
-
-
-                    <a href="{{ url_for('login') }}">
-                        Login
-                    </a>
-
-
-                    <a href="{{ url_for('register') }}">
-                        Register
-                    </a>
-
-
-                {% endif %}
-
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- ================= COPYRIGHT ================= -->
-
-        <div class="footer-bottom">
-
 
             <p>
-
-                © 2026 HireHub Job Portal.
-                All rights reserved.
-
+                Connecting talented candidates with the right
+                opportunities and helping businesses find the
+                right talent.
             </p>
-
 
         </div>
 
 
-    </footer>
+        <!-- QUICK LINKS -->
+        <div class="footer-column">
+
+            <h4>Quick Links</h4>
+
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
+
+            <a href="{{ url_for('jobs') }}">
+                Find Jobs
+            </a>
+
+            <a href="{{ url_for('register') }}">
+                Register
+            </a>
+
+            <a href="{{ url_for('login') }}">
+                Login
+            </a>
+
+        </div>
 
 
+        <!-- SERVICES -->
+        <div class="footer-column">
 
-    <!-- =====================================================
-                         JAVASCRIPT
-    ====================================================== -->
+            <h4>Services</h4>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}">
-    </script>
+            <a href="{{ url_for('jobs') }}">
+                Job Search
+            </a>
+
+            <a href="{{ url_for('register') }}">
+                Career Opportunities
+            </a>
+
+            <a href="{{ url_for('home') }}#contact">
+                Contact Us
+            </a>
+
+        </div>
 
 
-    <script>
+        <!-- CONTACT -->
+        <div class="footer-column footer-contact-column">
 
-        function toggleMobileMenu() {
+            <h4>Contact Us</h4>
 
-            const menu =
-                document.getElementById("mobileNav");
+            <p>
+                <strong>Harsh Nagar</strong>
+            </p>
+
+            <a href="mailto:nagarharsh21@gmail.com">
+                nagarharsh21@gmail.com
+            </a>
+
+            <a href="tel:+918700284930">
+                +91 87002 84930
+            </a>
+
+        </div>
+
+    </div>
 
 
-            if (menu) {
+    <!-- FOOTER BOTTOM -->
 
-                menu.classList.toggle("active");
+    <div class="footer-bottom">
 
-            }
+        <div>
 
-        }
+            © 2026 Hire Point Placement Services.
+            All rights reserved.
 
-    </script>
+        </div>
 
+        <div>
+            Built for better careers.
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =====================================================
+                     MOBILE MENU JS
+====================================================== -->
+
+<script>
+
+    const mobileMenuButton =
+        document.getElementById("mobileMenuButton");
+
+    const mobileNav =
+        document.getElementById("mobileNav");
+
+
+    if (mobileMenuButton && mobileNav) {
+
+        mobileMenuButton.addEventListener("click", function () {
+
+            mobileNav.classList.toggle("active");
+
+            mobileMenuButton.classList.toggle("active");
+
+        });
+
+
+        const mobileLinks =
+            mobileNav.querySelectorAll("a");
+
+
+        mobileLinks.forEach(function(link) {
+
+            link.addEventListener("click", function() {
+
+                mobileNav.classList.remove("active");
+
+                mobileMenuButton.classList.remove("active");
+
+            });
+
+        });
+
+    }
+
+</script>
+
+
+{% block extra_js %}{% endblock %}
 
 </body>
-
 </html>
-```

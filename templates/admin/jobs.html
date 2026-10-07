@@ -1,0 +1,1578 @@
+{% extends "base.html" %}
+
+{% block title %}Find Jobs | Hire Point Placement Services{% endblock %}
+
+{% block content %}
+
+<!-- =========================================================
+                    JOBS HERO
+========================================================= -->
+
+<section class="jobs-hero">
+
+    <div class="jobs-hero-overlay"></div>
+
+    <div class="jobs-hero-content">
+
+        <span class="jobs-hero-badge">
+            ✦ FIND YOUR NEXT OPPORTUNITY
+        </span>
+
+        <h1>
+            Find a job that
+            <span>fits your future.</span>
+        </h1>
+
+        <p>
+            Explore verified job opportunities from growing companies
+            and take the next step in your career.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+                    JOB SEARCH
+========================================================= -->
+
+<section class="jobs-search-section">
+
+    <div class="jobs-search-box">
+
+        <form
+            action="{{ url_for('jobs') }}"
+            method="GET"
+            class="jobs-search-form"
+        >
+
+            <div class="jobs-search-field">
+
+                <span class="search-icon">⌕</span>
+
+                <div>
+                    <label>KEYWORD</label>
+
+                    <input
+                        type="text"
+                        name="keyword"
+                        value="{{ keyword or '' }}"
+                        placeholder="Job title, skills..."
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="jobs-search-divider"></div>
+
+
+            <div class="jobs-search-field">
+
+                <span class="search-icon">⌖</span>
+
+                <div>
+                    <label>LOCATION</label>
+
+                    <input
+                        type="text"
+                        name="location"
+                        value="{{ location or '' }}"
+                        placeholder="City or location"
+                    >
+                </div>
+
+            </div>
+
+
+            <button type="submit" class="jobs-search-button">
+                Search Jobs
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+                    JOBS CONTENT
+========================================================= -->
+
+<section class="jobs-page-section">
+
+    <div class="jobs-page-container">
+
+
+        <!-- =================================================
+                        PAGE HEADER
+        ================================================== -->
+
+        <div class="jobs-page-header">
+
+            <div>
+
+                <span class="section-mini-label">
+                    JOB OPPORTUNITIES
+                </span>
+
+                <h2>
+                    Latest Jobs
+                </h2>
+
+                <p>
+                    Discover opportunities that match your skills,
+                    experience and career goals.
+                </p>
+
+            </div>
+
+
+            <div class="jobs-count">
+
+                <strong>
+                    {{ jobs|length }}
+                </strong>
+
+                <span>
+                    Jobs Available
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+                        JOB GRID
+        ================================================== -->
+
+        <div class="professional-jobs-grid">
+
+            {% if jobs %}
+
+                {% for job in jobs %}
+
+                <article class="professional-job-card">
+
+
+                    <!-- TOP -->
+
+                    <div class="professional-job-top">
+
+                        <div class="company-logo-box">
+
+                            <span>
+                                {{ job[2][0]|upper if job[2] else 'C' }}
+                            </span>
+
+                        </div>
+
+
+                        <span class="job-type-badge">
+                            {{ job[4] or 'Full Time' }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- JOB INFORMATION -->
+
+                    <div class="professional-job-content">
+
+                        <h3>
+                            {{ job[1] }}
+                        </h3>
+
+                        <p class="company-name">
+                            {{ job[2] }}
+                        </p>
+
+
+                        <div class="job-meta">
+
+                            <span>
+                                📍 {{ job[3] }}
+                            </span>
+
+                            {% if job[8] %}
+                            <span>
+                                ◷ {{ job[8] }} Experience
+                            </span>
+                            {% endif %}
+
+                        </div>
+
+
+                        {% if job[7] %}
+
+                        <div class="job-skills">
+
+                            {% for skill in job[7].split(',')[:4] %}
+
+                            <span>
+                                {{ skill.strip() }}
+                            </span>
+
+                            {% endfor %}
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if job[9] %}
+
+                        <p class="job-short-description">
+
+                            {{ job[9][:150] }}
+
+                            {% if job[9]|length > 150 %}
+                            ...
+                            {% endif %}
+
+                        </p>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- BOTTOM -->
+
+                    <div class="professional-job-bottom">
+
+
+                        <div class="salary-box">
+
+                            {% if job[5] and job[6] %}
+
+                                <strong>
+                                    ₹{{ "{:,.0f}".format(job[5]) }}
+                                    -
+                                    ₹{{ "{:,.0f}".format(job[6]) }}
+                                </strong>
+
+                                <small>
+                                    per year
+                                </small>
+
+                            {% elif job[5] %}
+
+                                <strong>
+                                    ₹{{ "{:,.0f}".format(job[5]) }}
+                                </strong>
+
+                                <small>
+                                    per year
+                                </small>
+
+                            {% else %}
+
+                                <strong>
+                                    Competitive
+                                </strong>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <a
+                            href="{{ url_for('job_detail', job_id=job[0]) }}"
+                            class="view-job-button"
+                        >
+                            View Job
+                            <span>→</span>
+                        </a>
+
+                    </div>
+
+
+                </article>
+
+                {% endfor %}
+
+
+            {% else %}
+
+
+                <!-- =================================================
+                            NO JOBS
+                ================================================== -->
+
+                <div class="no-jobs-box">
+
+                    <div class="no-jobs-icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        No jobs found
+                    </h3>
+
+                    <p>
+                        We couldn't find any jobs matching your search.
+                        Try another keyword or location.
+                    </p>
+
+                    <a
+                        href="{{ url_for('jobs') }}"
+                        class="clear-search-button"
+                    >
+                        View All Jobs
+                    </a>
+
+                </div>
+
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+                    EMPLOYER CTA
+========================================================= -->
+
+<section class="jobs-employer-section">
+
+    <div class="jobs-employer-container">
+
+        <div>
+
+            <span>
+                FOR EMPLOYERS
+            </span>
+
+            <h2>
+                Looking for talented people?
+            </h2>
+
+            <p>
+                Post your job on Hire Point and connect with
+                candidates who are ready for their next opportunity.
+            </p>
+
+        </div>
+
+
+        {% if session.get('role') == 'employer' %}
+
+        <a
+            href="{{ url_for('employer_portal') }}"
+            class="employer-cta-button"
+        >
+            Post a Job →
+        </a>
+
+        {% else %}
+
+        <a
+            href="{{ url_for('login') }}"
+            class="employer-cta-button"
+        >
+            Employer Login →
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<style>
+
+/* =========================================================
+                    JOBS HERO
+========================================================= */
+
+.jobs-hero {
+
+    position: relative;
+
+    min-height: 360px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 70px 20px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #071a3d 0%,
+            #0b2d68 50%,
+            #124b9b 100%
+        );
+
+    color: white;
+
+}
+
+
+.jobs-hero::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    right: -180px;
+    top: -250px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(96,165,250,0.15);
+
+}
+
+
+.jobs-hero::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 400px;
+    height: 400px;
+
+    left: -180px;
+    bottom: -250px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(59,130,246,0.12);
+
+}
+
+
+.jobs-hero-content {
+
+    position: relative;
+
+    z-index: 2;
+
+    max-width: 800px;
+
+    text-align: center;
+
+}
+
+
+.jobs-hero-badge {
+
+    display: inline-block;
+
+    margin-bottom: 18px;
+
+    padding: 8px 16px;
+
+    border-radius: 50px;
+
+    background:
+        rgba(255,255,255,0.10);
+
+    border:
+        1px solid rgba(255,255,255,0.20);
+
+    color: #bfdbfe;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.jobs-hero h1 {
+
+    margin-bottom: 18px;
+
+    font-size: clamp(38px, 5vw, 62px);
+
+    line-height: 1.08;
+
+    font-weight: 900;
+
+    letter-spacing: -2px;
+
+}
+
+
+.jobs-hero h1 span {
+
+    color: #60a5fa;
+
+}
+
+
+.jobs-hero p {
+
+    max-width: 650px;
+
+    margin: auto;
+
+    color: #dbeafe;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================================================
+                    SEARCH BOX
+========================================================= */
+
+.jobs-search-section {
+
+    position: relative;
+
+    z-index: 5;
+
+    margin-top: -42px;
+
+    padding: 0 20px;
+
+}
+
+
+.jobs-search-box {
+
+    max-width: 1050px;
+
+    margin: auto;
+
+    padding: 10px;
+
+    background: white;
+
+    border-radius: 16px;
+
+    border: 1px solid #e2e8f0;
+
+    box-shadow:
+        0 20px 45px rgba(15,23,42,0.12);
+
+}
+
+
+.jobs-search-form {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.jobs-search-field {
+
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 8px 15px;
+
+}
+
+
+.search-icon {
+
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 10px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 19px;
+
+}
+
+
+.jobs-search-field label {
+
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+}
+
+
+.jobs-search-field input {
+
+    width: 100%;
+
+    min-width: 180px;
+
+    height: 27px;
+
+    border: none;
+
+    outline: none;
+
+    color: #0f172a;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+.jobs-search-field input::placeholder {
+
+    color: #94a3b8;
+
+}
+
+
+.jobs-search-divider {
+
+    width: 1px;
+
+    height: 45px;
+
+    background: #e2e8f0;
+
+}
+
+
+.jobs-search-button {
+
+    height: 52px;
+
+    padding: 0 27px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: 0.25s ease;
+
+}
+
+
+.jobs-search-button:hover {
+
+    background: #1d4ed8;
+
+    transform: translateY(-2px);
+
+}
+
+
+/* =========================================================
+                    JOBS SECTION
+========================================================= */
+
+.jobs-page-section {
+
+    padding: 80px 20px 90px;
+
+}
+
+
+.jobs-page-container {
+
+    max-width: 1200px;
+
+    margin: auto;
+
+}
+
+
+.jobs-page-header {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 35px;
+
+}
+
+
+.section-mini-label {
+
+    color: #2563eb;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.6px;
+
+}
+
+
+.jobs-page-header h2 {
+
+    margin: 7px 0;
+
+    color: #0f172a;
+
+    font-size: 36px;
+
+    font-weight: 900;
+
+    letter-spacing: -1px;
+
+}
+
+
+.jobs-page-header p {
+
+    color: #64748b;
+
+    font-size: 13px;
+
+}
+
+
+.jobs-count {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 110px;
+
+    padding: 14px 20px;
+
+    border: 1px solid #dbeafe;
+
+    border-radius: 12px;
+
+    background: #eff6ff;
+
+}
+
+
+.jobs-count strong {
+
+    color: #2563eb;
+
+    font-size: 25px;
+
+    line-height: 1;
+
+}
+
+
+.jobs-count span {
+
+    margin-top: 4px;
+
+    color: #64748b;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+/* =========================================================
+                    JOB GRID
+========================================================= */
+
+.professional-jobs-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 22px;
+
+}
+
+
+.professional-job-card {
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-height: 365px;
+
+    padding: 24px;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 17px;
+
+    box-shadow:
+        0 6px 25px rgba(15,23,42,0.045);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+
+}
+
+
+.professional-job-card:hover {
+
+    transform: translateY(-6px);
+
+    border-color: #bfdbfe;
+
+    box-shadow:
+        0 18px 40px rgba(37,99,235,0.11);
+
+}
+
+
+.professional-job-top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+
+}
+
+
+.company-logo-box {
+
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eff6ff,
+            #dbeafe
+        );
+
+    color: #2563eb;
+
+    font-size: 19px;
+
+    font-weight: 900;
+
+}
+
+
+.job-type-badge {
+
+    padding: 6px 10px;
+
+    border-radius: 30px;
+
+    background: #f0fdf4;
+
+    color: #15803d;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+.professional-job-content {
+
+    flex: 1;
+
+}
+
+
+.professional-job-content h3 {
+
+    margin-bottom: 6px;
+
+    color: #0f172a;
+
+    font-size: 18px;
+
+    line-height: 1.4;
+
+    font-weight: 850;
+
+}
+
+
+.company-name {
+
+    margin-bottom: 16px;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.job-meta {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    margin-bottom: 17px;
+
+}
+
+
+.job-meta span {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 650;
+
+}
+
+
+.job-skills {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.job-skills span {
+
+    padding: 5px 8px;
+
+    border-radius: 6px;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
+
+.job-short-description {
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    line-height: 1.7;
+
+}
+
+
+.professional-job-bottom {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-top: 20px;
+
+    padding-top: 17px;
+
+    border-top: 1px solid #eef2f7;
+
+}
+
+
+.salary-box {
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+.salary-box strong {
+
+    color: #0f3d82;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+}
+
+
+.salary-box small {
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+}
+
+
+.view-job-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 9px 13px;
+
+    border-radius: 8px;
+
+    background: #0f3d82;
+
+    color: white;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    transition: 0.2s ease;
+
+}
+
+
+.view-job-button:hover {
+
+    background: #2563eb;
+
+}
+
+
+.view-job-button span {
+
+    font-size: 14px;
+
+}
+
+
+/* =========================================================
+                    NO JOBS
+========================================================= */
+
+.no-jobs-box {
+
+    grid-column: 1 / -1;
+
+    padding: 70px 25px;
+
+    text-align: center;
+
+    border: 1px dashed #cbd5e1;
+
+    border-radius: 18px;
+
+    background: white;
+
+}
+
+
+.no-jobs-icon {
+
+    width: 60px;
+    height: 60px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eff6ff;
+
+    font-size: 23px;
+
+}
+
+
+.no-jobs-box h3 {
+
+    margin-bottom: 7px;
+
+    color: #0f172a;
+
+    font-size: 20px;
+
+}
+
+
+.no-jobs-box p {
+
+    max-width: 500px;
+
+    margin: 0 auto 22px;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+}
+
+
+.clear-search-button {
+
+    display: inline-block;
+
+    padding: 11px 18px;
+
+    border-radius: 9px;
+
+    background: #2563eb;
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+                    EMPLOYER CTA
+========================================================= */
+
+.jobs-employer-section {
+
+    padding: 0 20px 90px;
+
+}
+
+
+.jobs-employer-container {
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    padding: 42px 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #071a3d,
+            #0f3d82
+        );
+
+    color: white;
+
+}
+
+
+.jobs-employer-container > div > span {
+
+    color: #93c5fd;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.jobs-employer-container h2 {
+
+    margin: 7px 0;
+
+    font-size: 27px;
+
+    font-weight: 900;
+
+}
+
+
+.jobs-employer-container p {
+
+    max-width: 650px;
+
+    color: #dbeafe;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+
+}
+
+
+.employer-cta-button {
+
+    flex-shrink: 0;
+
+    padding: 13px 20px;
+
+    border-radius: 9px;
+
+    background: white;
+
+    color: #0f3d82;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    transition: 0.25s ease;
+
+}
+
+
+.employer-cta-button:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,0.15);
+
+}
+
+
+/* =========================================================
+                    RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .professional-jobs-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .jobs-hero {
+
+        min-height: 330px;
+
+        padding: 60px 20px;
+
+    }
+
+
+    .jobs-hero h1 {
+
+        font-size: 42px;
+
+    }
+
+
+    .jobs-search-form {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .jobs-search-field {
+
+        width: 100%;
+
+    }
+
+
+    .jobs-search-divider {
+
+        width: 100%;
+
+        height: 1px;
+
+    }
+
+
+    .jobs-search-button {
+
+        width: 100%;
+
+    }
+
+
+    .jobs-page-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+
+    .professional-jobs-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .jobs-employer-container {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        padding: 35px 28px;
+
+    }
+
+
+    .employer-cta-button {
+
+        width: 100%;
+
+        text-align: center;
+
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .jobs-hero {
+
+        min-height: 300px;
+
+    }
+
+
+    .jobs-hero h1 {
+
+        font-size: 34px;
+
+        letter-spacing: -1px;
+
+    }
+
+
+    .jobs-hero p {
+
+        font-size: 12px;
+
+    }
+
+
+    .jobs-page-section {
+
+        padding-top: 65px;
+
+    }
+
+
+    .jobs-page-header h2 {
+
+        font-size: 30px;
+
+    }
+
+
+    .professional-job-card {
+
+        padding: 20px;
+
+    }
+
+
+    .professional-job-bottom {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+    }
+
+
+    .view-job-button {
+
+        justify-content: center;
+
+    }
+
+}
+/* =========================================
+   JOBS PAGE - LIGHT COLOR + CENTER
+========================================= */
+
+.jobs-page,
+.jobs-hero,
+.jobs-container {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Hero color touch */
+.jobs-hero {
+    background: linear-gradient(135deg, #0f172a, #1e3a8a, #312e81);
+}
+
+/* Search box */
+.jobs-search-box {
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    box-shadow: 0 12px 35px rgba(30, 64, 175, 0.12);
+}
+
+/* Job cards */
+.job-card {
+    border: 1px solid #e2e8f0;
+    transition: all 0.25s ease;
+}
+
+.job-card:hover {
+    border-color: #6366f1;
+    box-shadow: 0 15px 35px rgba(79, 70, 229, 0.12);
+    transform: translateY(-3px);
+}
+
+/* Job type */
+.job-type {
+    background: #eef2ff;
+    color: #4338ca;
+}
+
+/* Skills */
+.job-skill {
+    background: #f0f9ff;
+    color: #0369a1;
+}
+
+/* View Job button */
+.view-job,
+.job-card a {
+    color: #4f46e5;
+}
+
+.view-job:hover,
+.job-card a:hover {
+    color: #3730a3;
+}
+
+/* Center the job listing area */
+.jobs-container {
+    width: min(1120px, 92%);
+}
+
+/* Heading */
+.jobs-heading {
+    text-align: center;
+}
+
+</style>
+
+{% endblock %}

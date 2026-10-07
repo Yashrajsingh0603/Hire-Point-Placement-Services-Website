@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dashboard-page">
+
+    <div class="dashboard-header">
+        <p class="small-heading">WELCOME BACK</p>
+
+        <h1>
+            Hello, {{ session.get("user_name", "User") }} 👋
+        </h1>
+
+        <p>
+            Welcome to your HireHub dashboard.
+        </p>
+    </div>
+
+    <div class="dashboard-cards">
+
+        <div class="dashboard-card">
+            <div class="card-icon">💼</div>
+
+            <h2>Find Jobs</h2>
+
+            <p>
+                Explore available jobs and find your next opportunity.
+            </p>
+
+            <a href="{{ url_for('jobs') }}">
+                Browse Jobs →
+            </a>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-icon">📄</div>
+
+            <h2>My Applications</h2>
+
+            <p>
+                Keep track of the jobs you have applied for.
+            </p>
+
+            <a href="#">
+                View Applications →
+            </a>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="card-icon">👤</div>
+
+            <h2>My Profile</h2>
+
+            <p>
+                Manage your account and profile information.
+            </p>
+
+            <a href="#">
+                View Profile →
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+
+.dashboard-page {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 25px;
+}
+
+.dashboard-header {
+    margin-bottom: 40px;
+}
+
+.small-heading {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #666;
+}
+
+.dashboard-header h1 {
+    font-size: 42px;
+    margin: 10px 0;
+}
+
+.dashboard-header p {
+    color: #666;
+    font-size: 17px;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.dashboard-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.card-icon {
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+
+.dashboard-card h2 {
+    margin-bottom: 10px;
+}
+
+.dashboard-card p {
+    color: #666;
+    line-height: 1.6;
+    min-height: 55px;
+}
+
+.dashboard-card a {
+    display: inline-block;
+    margin-top: 15px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+@media (max-width: 800px) {
+
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-header h1 {
+        font-size: 32px;
+    }
+
+}
+
+</style>
+
+{% endblock %}

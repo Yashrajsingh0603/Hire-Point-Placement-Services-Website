@@ -1,402 +1,221 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block title %}Post a Job | JobPortal{% endblock %}
+    <title>Post a Job | HireHub</title>
 
-{% block content %}
-
-<style>
-
-    .post-job-page {
-        max-width: 1050px;
-        margin: 50px auto;
-        padding: 0 20px 70px;
-    }
-
-    .post-job-header {
-        text-align: center;
-        margin-bottom: 35px;
-    }
-
-    .post-job-header h1 {
-        font-size: 40px;
-        color: #111827;
-        margin-bottom: 10px;
-    }
-
-    .post-job-header p {
-        color: #667085;
-        font-size: 16px;
-    }
-
-    .post-job-card {
-        background: #ffffff;
-        border-radius: 18px;
-        padding: 40px;
-        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
-        border: 1px solid #e5e7eb;
-    }
-
-    .section-title {
-        font-size: 20px;
-        font-weight: 700;
-        color: #111827;
-        margin: 10px 0 20px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .form-group {
-        margin-bottom: 22px;
-    }
-
-    .main-label {
-        display: block;
-        font-size: 14px;
-        font-weight: 700;
-        color: #374151;
-        margin-bottom: 9px;
-    }
-
-    /* COMPANY CARDS */
-
-    .company-options {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        margin-bottom: 30px;
-    }
-
-    .company-option {
-        position: relative;
-    }
-
-    .company-option input[type="radio"] {
-        position: absolute;
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    .company-option label {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        padding: 18px;
-        border: 2px solid #e5e7eb;
-        border-radius: 12px;
-        background: #ffffff;
-        cursor: pointer;
-        transition: 0.2s ease;
-    }
-
-    .company-option label:hover {
-        border-color: #93b4ff;
-        background: #f8fbff;
-    }
-
-    .company-option input[type="radio"]:checked + label {
-        border-color: #2563eb;
-        background: #eef4ff;
-    }
-
-    .company-icon {
-        width: 45px;
-        height: 45px;
-        min-width: 45px;
-        border-radius: 10px;
-        background: #e8f0ff;
-        color: #2563eb;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-    }
-
-    .company-info strong {
-        display: block;
-        color: #111827;
-        font-size: 15px;
-    }
-
-    .company-info span {
-        color: #667085;
-        font-size: 12px;
-    }
-
-    /* FORM */
-
-    .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
-
-    .full-width {
-        grid-column: 1 / -1;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 13px 14px;
-        border: 1px solid #d1d5db;
-        border-radius: 9px;
-        background: #ffffff;
-        color: #111827;
-        font-size: 14px;
-        font-family: inherit;
-        outline: none;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
-    }
-
-    .form-group textarea {
-        min-height: 180px;
-        resize: vertical;
-    }
-
-    .help-text {
-        display: block;
-        margin-top: 6px;
-        color: #667085;
-        font-size: 12px;
-    }
-
-    /* BUTTONS */
-
-    .form-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        margin-top: 30px;
-        padding-top: 25px;
-        border-top: 1px solid #e5e7eb;
-    }
-
-    .cancel-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 13px 22px;
-        border-radius: 9px;
-        background: #f3f4f6;
-        color: #374151;
-        font-weight: 700;
-        text-decoration: none;
-    }
-
-    .publish-btn {
-        padding: 13px 25px;
-        border: none;
-        border-radius: 9px;
-        background: #2563eb;
-        color: #ffffff;
-        font-weight: 700;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-    .publish-btn:hover {
-        background: #1d4ed8;
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 700px) {
-
-        .post-job-page {
-            margin: 30px auto;
+    <style>
+        * {
+            box-sizing: border-box;
         }
 
-        .post-job-card {
-            padding: 25px 20px;
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
         }
 
-        .post-job-header h1 {
+        .container {
+            width: 90%;
+            max-width: 850px;
+            margin: 50px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 8px;
             font-size: 30px;
         }
 
-        .company-options {
-            grid-template-columns: 1fr;
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
         }
 
-        .form-grid {
-            grid-template-columns: 1fr;
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        .full-width {
-            grid-column: auto;
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
-        .form-actions {
-            flex-direction: column;
-        }
-
-        .cancel-btn,
-        .publish-btn {
+        input,
+        textarea,
+        select {
             width: 100%;
-            box-sizing: border-box;
-            text-align: center;
+            padding: 13px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
         }
 
-    }
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #2563eb;
+        }
 
-</style>
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
 
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
 
-<div class="post-job-page">
+        .company-actions {
+            margin-top: 10px;
+        }
 
-    <!-- HEADER -->
+        .new-company-box {
+            display: none;
+            margin-top: 12px;
+        }
 
-    <div class="post-job-header">
+        .new-company-box small {
+            display: block;
+            margin-top: 6px;
+            color: #6b7280;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 9px;
+            padding: 13px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-add {
+            background: #eef2ff;
+            color: #3730a3;
+        }
+
+        .btn-add:hover {
+            background: #e0e7ff;
+        }
+
+        .btn-submit {
+            width: 100%;
+            margin-top: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+        }
+
+        .btn-submit:hover {
+            background: #1d4ed8;
+        }
+
+        @media (max-width: 700px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
 
         <h1>Post a New Job</h1>
 
-        <p>
-            Create a professional job listing and find the right candidate.
+        <p class="subtitle">
+            Add a job opening and reach talented candidates.
         </p>
 
-    </div>
+        <form method="POST">
 
+            <!-- JOB TITLE -->
+            <div class="form-group">
 
-    <!-- CARD -->
+                <label for="title">
+                    Job Title *
+                </label>
 
-    <div class="post-job-card">
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="e.g. Python Developer"
+                    required
+                >
 
-        <form
-            method="POST"
-            action="{{ url_for('post_job') }}"
-        >
+            </div>
 
 
             <!-- COMPANY -->
-
-            <div class="section-title">
-                Company Information
-            </div>
-
             <div class="form-group">
 
-                <label class="main-label">
-                    Select Company
+                <label for="company_name">
+                    Company Name *
                 </label>
 
+                <input
+                    type="text"
+                    id="company_name"
+                    name="company_name"
+                    placeholder="Enter any company name"
+                    required
+                >
 
-                <div class="company-options">
-
-                    {% for company in companies %}
-
-                    <div class="company-option">
-
-                        <input
-                            type="radio"
-                            id="company_{{ company[0] }}"
-                            name="company_id"
-                            value="{{ company[0] }}"
-                            required
-                        >
-
-                        <label
-                            for="company_{{ company[0] }}"
-                        >
-
-                            <div class="company-icon">
-                                🏢
-                            </div>
-
-                            <div class="company-info">
-
-                                <strong>
-                                    {{ company[1] }}
-                                </strong>
-
-                                <span>
-                                    Company
-                                </span>
-
-                            </div>
-
-                        </label>
-
-                    </div>
-
-                    {% endfor %}
-
-                </div>
+                <small style="color:#6b7280;">
+                    You can enter any company name. If it already exists,
+                    HireHub will use the existing company.
+                </small>
 
             </div>
 
 
-            <!-- JOB INFORMATION -->
-
-            <div class="section-title">
-                Job Information
-            </div>
-
-
-            <div class="form-grid">
-
-
-                <!-- JOB TITLE -->
-
-                <div class="form-group full-width">
-
-                    <label
-                        class="main-label"
-                        for="title"
-                    >
-                        Job Title
-                    </label>
-
-                    <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        placeholder="e.g. Full Stack Developer"
-                        required
-                    >
-
-                </div>
-
-
-                <!-- LOCATION -->
+            <!-- LOCATION + JOB TYPE -->
+            <div class="row">
 
                 <div class="form-group">
 
-                    <label
-                        class="main-label"
-                        for="location"
-                    >
-                        Location
+                    <label for="location">
+                        Location *
                     </label>
 
                     <input
                         type="text"
                         id="location"
                         name="location"
-                        placeholder="e.g. Gurugram, Haryana"
+                        placeholder="e.g. Gurgaon, Delhi"
                         required
                     >
 
                 </div>
 
 
-                <!-- JOB TYPE -->
-
                 <div class="form-group">
 
-                    <label
-                        class="main-label"
-                        for="job_type"
-                    >
-                        Job Type
+                    <label for="job_type">
+                        Job Type *
                     </label>
 
                     <select
@@ -405,11 +224,7 @@
                         required
                     >
 
-                        <option
-                            value=""
-                            disabled
-                            selected
-                        >
+                        <option value="">
                             Select Job Type
                         </option>
 
@@ -429,23 +244,19 @@
                             Contract
                         </option>
 
-                        <option value="Remote">
-                            Remote
-                        </option>
-
                     </select>
 
                 </div>
 
+            </div>
 
-                <!-- MINIMUM SALARY -->
+
+            <!-- SALARY -->
+            <div class="row">
 
                 <div class="form-group">
 
-                    <label
-                        class="main-label"
-                        for="salary_min"
-                    >
+                    <label for="salary_min">
                         Minimum Salary
                     </label>
 
@@ -453,21 +264,16 @@
                         type="number"
                         id="salary_min"
                         name="salary_min"
-                        placeholder="400000"
+                        placeholder="e.g. 30000"
                         min="0"
                     >
 
                 </div>
 
 
-                <!-- MAXIMUM SALARY -->
-
                 <div class="form-group">
 
-                    <label
-                        class="main-label"
-                        for="salary_max"
-                    >
+                    <label for="salary_max">
                         Maximum Salary
                     </label>
 
@@ -475,111 +281,71 @@
                         type="number"
                         id="salary_max"
                         name="salary_max"
-                        placeholder="700000"
+                        placeholder="e.g. 60000"
                         min="0"
                     >
 
                 </div>
 
+            </div>
 
-                <!-- EXPERIENCE -->
 
-                <div class="form-group">
+            <!-- EXPERIENCE -->
+            <div class="form-group">
 
-                    <label
-                        class="main-label"
-                        for="experience"
-                    >
-                        Experience
-                    </label>
+                <label for="experience">
+                    Experience
+                </label>
 
-                    <input
-                        type="text"
-                        id="experience"
-                        name="experience"
-                        placeholder="0-2 Years"
-                        required
-                    >
-
-                </div>
+                <input
+                    type="text"
+                    id="experience"
+                    name="experience"
+                    placeholder="e.g. 0-2 Years"
+                >
 
             </div>
 
 
             <!-- SKILLS -->
-
-            <div class="section-title">
-                Required Skills
-            </div>
-
             <div class="form-group">
 
-                <label
-                    class="main-label"
-                    for="skills"
-                >
-                    Skills
+                <label for="skills">
+                    Required Skills
                 </label>
 
                 <input
                     type="text"
                     id="skills"
                     name="skills"
-                    placeholder="HTML, CSS, JavaScript, Python, Flask, PostgreSQL"
-                    required
+                    placeholder="e.g. Python, Flask, PostgreSQL"
                 >
-
-                <span class="help-text">
-                    Separate multiple skills using commas.
-                </span>
 
             </div>
 
 
             <!-- DESCRIPTION -->
-
-            <div class="section-title">
-                Job Description
-            </div>
-
             <div class="form-group">
 
-                <label
-                    class="main-label"
-                    for="description"
-                >
-                    Description
+                <label for="description">
+                    Job Description
                 </label>
 
                 <textarea
                     id="description"
                     name="description"
-                    placeholder="Describe the job responsibilities, requirements and qualifications..."
-                    required
+                    placeholder="Write complete job description..."
                 ></textarea>
 
             </div>
 
 
-            <!-- BUTTONS -->
-
-            <div class="form-actions">
-
-                <a
-                    href="{{ url_for('jobs') }}"
-                    class="cancel-btn"
-                >
-                    Cancel
-                </a>
-
-                <button
-                    type="submit"
-                    class="publish-btn"
-                >
-                    🚀 Publish Job
-                </button>
-
-            </div>
+            <button
+                type="submit"
+                class="btn btn-submit"
+            >
+                Post Job
+            </button>
 
         </form>
 
@@ -587,4 +353,5 @@
 
 </div>
 
-{% endblock %}
+</body>
+</html>

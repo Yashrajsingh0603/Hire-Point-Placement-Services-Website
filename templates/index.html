@@ -1,65 +1,89 @@
 {% extends "base.html" %}
 
+{% block title %}
+Hire Point Placement Services | Find Your Next Opportunity
+{% endblock %}
+
 {% block content %}
 
 <!-- =====================================================
-                     HERO SECTION
+                        HERO SECTION
 ====================================================== -->
 
 <section class="hero-section">
 
+    <div class="hero-background-shape shape-one"></div>
+    <div class="hero-background-shape shape-two"></div>
+
     <div class="hero-content">
 
-        <p class="small-heading">
-            FIND YOUR NEXT OPPORTUNITY
-        </p>
+        <!-- HIRE POINT BRAND -->
+
+        <div class="hero-brand">
+
+            <div class="hero-brand-logo">
+
+                <img
+                    src="{{ url_for('static', filename='images/hirepoint-logo.png.jpeg') }}"
+                    alt="Hire Point Placement Services Logo"
+                >
+
+            </div>
+
+            <div class="hero-brand-name">
+
+                <h2>HIRE POINT</h2>
+
+                <span>
+                    PLACEMENT SERVICES
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- BADGE -->
+
+        <div class="hero-badge">
+            ✦ YOUR CAREER STARTS HERE
+        </div>
+
+
+        <!-- HEADING -->
 
         <h1>
-            Find a job you
-            <span>love.</span>
+            Find a job <span>you love.</span>
         </h1>
 
+
         <p class="hero-text">
-            Discover thousands of job opportunities from leading companies
-            and take the next step in your career.
+            Discover the right opportunities, connect with leading
+            companies and take the next big step in your career.
         </p>
 
 
         <!-- SEARCH -->
 
         <form
+            class="hero-search"
             action="{{ url_for('home') }}"
             method="GET"
-            class="search-box"
         >
 
-            <div class="search-input">
+            <input
+                type="text"
+                name="keyword"
+                placeholder="Job title, skills or keywords"
+                value="{{ keyword }}"
+            >
 
-                <span>🔎</span>
-
-                <input
-                    type="text"
-                    name="keyword"
-                    placeholder="Job title, skills or keyword"
-                    value="{{ request.args.get('keyword', '') }}"
-                >
-
-            </div>
-
-
-            <div class="search-input">
-
-                <span>📍</span>
-
-                <input
-                    type="text"
-                    name="location"
-                    placeholder="Location"
-                    value="{{ request.args.get('location', '') }}"
-                >
-
-            </div>
-
+            <input
+                type="text"
+                name="location"
+                placeholder="Location"
+                value="{{ location }}"
+            >
 
             <button type="submit">
                 Search Jobs
@@ -74,24 +98,20 @@
 
             <span>Popular:</span>
 
-            <a href="{{ url_for('home') }}?keyword=Python">
+            <a href="{{ url_for('home', keyword='Python') }}">
                 Python
             </a>
 
-            <a href="{{ url_for('home') }}?keyword=Java">
-                Java
+            <a href="{{ url_for('home', keyword='Developer') }}">
+                Developer
             </a>
 
-            <a href="{{ url_for('home') }}?keyword=React">
-                React
+            <a href="{{ url_for('home', keyword='Data Analyst') }}">
+                Data Analyst
             </a>
 
-            <a href="{{ url_for('home') }}?keyword=Data%20Science">
-                Data Science
-            </a>
-
-            <a href="{{ url_for('home') }}?keyword=Machine%20Learning">
-                Machine Learning
+            <a href="{{ url_for('home', keyword='Internship') }}">
+                Internship
             </a>
 
         </div>
@@ -101,379 +121,521 @@
 </section>
 
 
-
 <!-- =====================================================
-                     STATISTICS
+                         STATS
 ====================================================== -->
 
 <section class="stats-section">
 
-    <div class="stat-card">
+    <div class="stats-container">
 
-        <h2>
-            {{ user_count }}+
-        </h2>
+        <div class="stat-card">
 
-        <p>
-            Registered Users
-        </p>
+            <h3>
+                {{ user_count }}
+            </h3>
 
-    </div>
+            <p>
+                Registered Users
+            </p>
 
-
-    <div class="stat-card">
-
-        <h2>
-            {{ jobs|length }}+
-        </h2>
-
-        <p>
-            Active Jobs
-        </p>
-
-    </div>
+        </div>
 
 
-    <div class="stat-card">
+        <div class="stat-card">
 
-        <h2>
-            100+
-        </h2>
+            <h3>
+                {{ job_count }}
+            </h3>
 
-        <p>
-            Companies
-        </p>
+            <p>
+                Available Jobs
+            </p>
 
-    </div>
+        </div>
 
 
-    <div class="stat-card">
+        <div class="stat-card">
 
-        <h2>
-            95%
-        </h2>
+            <h3>
+                {{ company_count }}
+            </h3>
 
-        <p>
-            Success Rate
-        </p>
+            <p>
+                Hiring Companies
+            </p>
+
+        </div>
 
     </div>
 
 </section>
 
 
-
 <!-- =====================================================
-                     JOBS SECTION
+                     FEATURED JOBS
 ====================================================== -->
 
-<section class="jobs-section">
+<section class="section">
 
+    <div class="section-container">
 
-    <div class="section-header">
+        <div class="section-heading">
 
-        <div>
-
-            <p class="small-heading">
+            <div class="small-heading">
                 LATEST OPPORTUNITIES
-            </p>
+            </div>
 
             <h2>
                 Featured Jobs
             </h2>
 
             <p>
-                Explore the latest job opportunities available on HireHub.
+                Explore the latest opportunities from companies
+                looking for talented people like you.
             </p>
 
         </div>
 
 
-        <!-- ADMIN ONLY -->
+        {% if jobs %}
 
-        {% if session.get('user_role') == 'admin' %}
+        <div class="jobs-grid">
 
-        <a
-            href="{{ url_for('admin_jobs') }}"
-            class="view-all-btn"
-        >
-            Manage Jobs →
-        </a>
+            {% for job in jobs[:6] %}
 
-        {% endif %}
+            <article class="job-card">
 
-    </div>
+                <div class="job-card-top">
 
+                    <div class="company-logo">
 
+                        {% if job[2] %}
+                            {{ job[2][0]|upper }}
+                        {% else %}
+                            C
+                        {% endif %}
 
-    <!-- =====================================================
-                    SEARCH RESULT MESSAGE
-    ====================================================== -->
+                    </div>
 
-    {% if request.args.get('keyword') or request.args.get('location') %}
-
-    <div class="search-result-message">
-
-        <strong>
-            Search Results
-        </strong>
-
-
-        {% if request.args.get('keyword') %}
-
-        <span>
-            Keyword:
-            "{{ request.args.get('keyword') }}"
-        </span>
-
-        {% endif %}
-
-
-        {% if request.args.get('location') %}
-
-        <span>
-            Location:
-            "{{ request.args.get('location') }}"
-        </span>
-
-        {% endif %}
-
-    </div>
-
-    {% endif %}
-
-
-
-    <!-- =====================================================
-                         JOB CARDS
-    ====================================================== -->
-
-    <div class="jobs-grid">
-
-
-        {% for job in jobs %}
-
-
-        <div class="job-card">
-
-
-            <!-- JOB TOP -->
-
-            <div class="job-card-top">
-
-
-                <div class="company-logo">
-
-                    {{ job[1][0]|upper if job[1] else 'C' }}
-
-                </div>
-
-
-                <div class="job-title-area">
-
-                    <h3>
-                        {{ job[0] }}
-                    </h3>
-
-
-                    <p class="company-name">
-                        {{ job[1] }}
-                    </p>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- JOB DETAILS -->
-
-            <div class="job-details">
-
-
-                {% if job[2] %}
-
-                <span>
-                    📍 {{ job[2] }}
-                </span>
-
-                {% endif %}
-
-
-                {% if job[3] %}
-
-                <span>
-                    💼 {{ job[3] }}
-                </span>
-
-                {% endif %}
-
-            </div>
-
-
-
-            <!-- SKILLS -->
-
-            {% if job[6] %}
-
-            <div class="job-skills">
-
-
-                {% for skill in job[6].split(',') %}
-
-
-                    {% if skill.strip() %}
-
-                    <span>
-                        {{ skill.strip() }}
+                    <span class="job-type-badge">
+                        {{ job[4] }}
                     </span>
 
+                </div>
+
+
+                <h3>
+                    {{ job[1] }}
+                </h3>
+
+
+                <p class="job-company">
+                    {{ job[2] }}
+                </p>
+
+
+                <div class="job-meta">
+
+                    <span>
+                        📍 {{ job[3] }}
+                    </span>
+
+                    {% if job[8] %}
+                    <span>
+                        💼 {{ job[8] }}
+                    </span>
                     {% endif %}
-
-
-                {% endfor %}
-
-
-            </div>
-
-            {% endif %}
-
-
-
-            <!-- SALARY -->
-
-            <div class="job-bottom">
-
-
-                <div class="salary">
-
-
-                    {% if job[4] and job[5] %}
-
-                        ₹{{ (job[4] / 100000)|round(1) }}L -
-                        ₹{{ (job[5] / 100000)|round(1) }}L
-
-
-                    {% elif job[4] %}
-
-                        ₹{{ (job[4] / 100000)|round(1) }}L+
-
-
-                    {% else %}
-
-                        Salary not disclosed
-
-                    {% endif %}
-
 
                 </div>
 
 
-                <span class="job-time">
-                    Recently posted
-                </span>
+                {% if job[7] %}
+
+                <div class="job-skills">
+
+                    {% for skill in job[7].split(',')[:4] %}
+
+                        <span>
+                            {{ skill.strip() }}
+                        </span>
+
+                    {% endfor %}
+
+                </div>
+
+                {% endif %}
 
 
-            </div>
+                {% if job[9] %}
 
+                <p class="job-description">
+                    {{ job[9] }}
+                </p>
+
+                {% endif %}
+
+
+                <div class="job-card-bottom">
+
+                    <div class="salary">
+
+                        {% if job[5] and job[6] %}
+
+                            ₹{{ "{:,.0f}".format(job[5]) }}
+                            -
+                            ₹{{ "{:,.0f}".format(job[6]) }}
+
+                        {% elif job[5] %}
+
+                            ₹{{ "{:,.0f}".format(job[5]) }}
+
+                        {% else %}
+
+                            Salary not disclosed
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <a
+                        href="{{ url_for('job_detail', job_id=job[0]) }}"
+                        class="view-job"
+                    >
+                        View Job →
+                    </a>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
 
         </div>
 
+
+        <!-- VIEW ALL JOBS -->
+
+        <div class="view-all-jobs">
+
+            <a
+                href="{{ url_for('jobs') }}"
+                class="cta-button"
+            >
+                View All Jobs →
+            </a>
+
+        </div>
 
         {% else %}
 
-
-        <!-- =====================================================
-                            NO JOBS
-        ====================================================== -->
-
-        <div class="no-jobs">
-
-
-            <div class="no-jobs-icon">
-                💼
-            </div>
-
+        <div class="empty-state">
 
             <h3>
-                No jobs found
+                No jobs available yet
             </h3>
 
-
             <p>
-                We couldn't find any jobs matching your search.
-                Try another keyword or location.
+                New opportunities will appear here soon.
             </p>
-
-
-            <a href="{{ url_for('home') }}">
-                View All Jobs
-            </a>
-
 
         </div>
 
-
-        {% endfor %}
-
+        {% endif %}
 
     </div>
 
 </section>
 
 
+<!-- =====================================================
+                     WHY HIRE POINT
+====================================================== -->
+
+<section class="section why-section">
+
+    <div class="section-container">
+
+        <div class="why-grid">
+
+
+            <!-- LEFT -->
+
+            <div class="why-content">
+
+                <div class="small-heading">
+                    WHY HIRE POINT
+                </div>
+
+                <h2>
+                    Your career deserves
+                    the right opportunity.
+                </h2>
+
+                <p>
+                    We make job searching simple by connecting
+                    talented candidates with genuine opportunities
+                    from growing companies.
+                </p>
+
+
+                <div class="why-points">
+
+
+                    <div class="why-point">
+
+                        <div class="why-icon">
+                            ✓
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                Verified Opportunities
+                            </h4>
+
+                            <p>
+                                Discover relevant jobs from
+                                hiring companies.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="why-point">
+
+                        <div class="why-icon">
+                            ★
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                Better Career Choices
+                            </h4>
+
+                            <p>
+                                Find opportunities matching
+                                your skills and experience.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="why-point">
+
+                        <div class="why-icon">
+                            →
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                Simple Job Search
+                            </h4>
+
+                            <p>
+                                Search jobs by keyword,
+                                location and category.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div class="why-brand-card">
+
+                <div class="why-brand-logo">
+
+                    <img
+                        src="{{ url_for('static', filename='images/hirepoint-logo.png.jpeg') }}"
+                        alt="Hire Point Logo"
+                    >
+
+                </div>
+
+                <h3>
+                    HIRE POINT
+                </h3>
+
+                <span>
+                    PLACEMENT SERVICES
+                </span>
+
+                <p>
+                    Connecting ambitious people with
+                    meaningful careers and helping
+                    businesses discover great talent.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
 
 <!-- =====================================================
-                         CTA SECTION
+                         CTA
 ====================================================== -->
 
 <section class="cta-section">
 
-
-    <div class="cta-content">
-
-
-        <p class="small-heading">
-            READY FOR YOUR NEXT MOVE?
-        </p>
-
+    <div class="cta-container">
 
         <h2>
-            Your next opportunity
-            starts here.
+            Looking for your next opportunity?
         </h2>
 
-
         <p>
-            Create your HireHub account and start exploring
-            exciting career opportunities today.
+            Create your account and start exploring
+            career opportunities today.
         </p>
 
 
-        <div class="cta-buttons">
+        {% if session.get('user_id') %}
 
+            <a
+                href="{{ url_for('jobs') }}"
+                class="cta-button"
+            >
+                Explore Jobs →
+            </a>
+
+        {% else %}
 
             <a
                 href="{{ url_for('register') }}"
-                class="register-btn"
+                class="cta-button"
             >
-                Create Account
+                Create Free Account →
             </a>
 
+        {% endif %}
 
-            <a
-                href="{{ url_for('login') }}"
-                class="login-btn"
-            >
-                Sign In
-            </a>
+    </div>
 
+</section>
+
+
+<!-- =====================================================
+                       CONTACT
+====================================================== -->
+
+<section
+    class="contact-section"
+    id="contact"
+>
+
+    <div class="contact-container">
+
+        <div class="section-heading">
+
+            <div class="small-heading">
+                GET IN TOUCH
+            </div>
+
+            <h2>
+                Contact Hire Point
+            </h2>
+
+            <p>
+                Have a question or need help with your
+                career journey? Get in touch with us.
+            </p>
+
+        </div>
+
+
+        <div class="contact-grid">
+
+
+            <!-- BRAND CARD -->
+
+            <div class="contact-card">
+
+                <div class="contact-brand">
+
+                    <div class="contact-brand-logo">
+
+                        <img
+                            src="{{ url_for('static', filename='images/hirepoint-logo.png.jpeg') }}"
+                            alt="Hire Point Logo"
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Hire Point
+                        </h3>
+
+                        <p>
+                            Placement Services
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <p>
+                    Helping candidates discover better
+                    opportunities and companies find the
+                    right talent.
+                </p>
+
+            </div>
+
+
+            <!-- CONTACT DETAILS -->
+
+            <div class="contact-card">
+
+                <h3>
+                    Contact Person
+                </h3>
+
+                <p>
+                    <strong>
+                        Harsh Nagar
+                    </strong>
+                </p>
+
+
+                <div class="contact-details">
+
+                    <a href="mailto:nagarharsh21@gmail.com">
+                        ✉ nagarharsh21@gmail.com
+                    </a>
+
+                    <a href="tel:+918700284930">
+                        ☎ +91 87002 84930
+                    </a>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
 </section>
-
 
 {% endblock %}

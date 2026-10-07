@@ -498,10 +498,18 @@
 
                             <div class="cover-letter">
 
-                                {{ application[5][:180] }}
+                                {% if application|length > 6 and application[6] %}
 
-                                {% if application[5]|length > 180 %}
-                                    ...
+                                    {{ application[6][:180] }}
+
+                                    {% if application[6]|length > 180 %}
+                                        ...
+                                    {% endif %}
+
+                                {% else %}
+
+                                    —
+
                                 {% endif %}
 
                             </div>

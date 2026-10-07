@@ -1,136 +1,304 @@
 {% extends "base.html" %}
 
-{% block title %}Create Account | HireHub{% endblock %}
+{% block title %}Create Account | Hire Point{% endblock %}
 
 {% block content %}
 
-<section class="auth-section">
+<section class="register-page">
 
-    <div class="auth-container">
+    <div class="register-background-circle circle-one"></div>
+    <div class="register-background-circle circle-two"></div>
 
-        <div class="auth-card">
+    <div class="register-container">
 
-            <div class="auth-header">
+        <!-- LEFT SIDE -->
 
-                <span class="auth-badge">
-                    JOIN HIREHUB
-                </span>
+        <div class="register-info">
 
-                <h1>Create Account</h1>
+            <div class="register-brand">
+
+                <div class="register-logo">
+                    <img
+                        src="{{ url_for('static', filename='images/hirepoint-logo.png.jpeg') }}"
+                        alt="Hire Point Logo"
+                    >
+                </div>
+
+                <div>
+                    <h2>HIRE POINT</h2>
+                    <span>PLACEMENT SERVICES</span>
+                </div>
+
+            </div>
+
+
+            <span class="register-label">
+                START YOUR JOURNEY
+            </span>
+
+
+            <h1>
+                Build your career.
+                <span>Find your opportunity.</span>
+            </h1>
+
+
+            <p>
+                Create your Hire Point account and discover job
+                opportunities that match your skills, experience
+                and career goals.
+            </p>
+
+
+            <div class="register-benefits">
+
+                <div class="register-benefit">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <strong>Discover opportunities</strong>
+                        <small>Find jobs matching your skills.</small>
+                    </div>
+                </div>
+
+
+                <div class="register-benefit">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <strong>Build your profile</strong>
+                        <small>Present yourself professionally.</small>
+                    </div>
+                </div>
+
+
+                <div class="register-benefit">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <strong>Connect with employers</strong>
+                        <small>Take the next step in your career.</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="register-card">
+
+            <div class="register-card-header">
+
+                <span>CREATE ACCOUNT</span>
+
+                <h2>
+                    Join Hire Point
+                </h2>
 
                 <p>
-                    Create your account and start using HireHub.
+                    Create your account in just a few steps.
                 </p>
 
             </div>
 
 
-            <form method="POST" action="{{ url_for('register') }}">
+            {% with messages = get_flashed_messages(with_categories=true) %}
 
-                <!-- Name -->
-                <div class="form-group">
+                {% if messages %}
+
+                    {% for category, message in messages %}
+
+                    <div class="register-alert {{ category }}">
+                        {{ message }}
+                    </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            {% endwith %}
+
+
+            <form
+                action="{{ url_for('register') }}"
+                method="POST"
+                class="register-form"
+            >
+
+
+                <!-- NAME -->
+
+                <div class="register-input-group">
 
                     <label for="name">
                         Full Name
                     </label>
 
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        placeholder="Enter your full name"
-                        required
-                    >
+                    <div class="register-input">
+
+                        <span>👤</span>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter your full name"
+                            required
+                        >
+
+                    </div>
 
                 </div>
 
 
-                <!-- Email -->
-                <div class="form-group">
+                <!-- EMAIL -->
+
+                <div class="register-input-group">
 
                     <label for="email">
                         Email Address
                     </label>
 
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Enter your email"
-                        required
-                    >
+                    <div class="register-input">
+
+                        <span>✉</span>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email address"
+                            required
+                        >
+
+                    </div>
 
                 </div>
 
 
-                <!-- Password -->
-                <div class="form-group">
+                <!-- PASSWORD -->
+
+                <div class="register-input-group">
 
                     <label for="password">
                         Password
                     </label>
 
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Create a password"
-                        minlength="6"
-                        required
-                    >
+                    <div class="register-input">
+
+                        <span>🔒</span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password"
+                            required
+                        >
+
+                    </div>
 
                 </div>
 
 
-                <!-- Role -->
-                <div class="form-group">
+                <!-- ROLE -->
 
-                    <label for="role">
-                        Account Type
+                <div class="register-input-group">
+
+                    <label>
+                        I am registering as
                     </label>
 
-                    <select
-                        id="role"
-                        name="role"
-                        required
-                    >
+                    <div class="role-options">
 
-                        <option value="">
-                            Select account type
-                        </option>
+                        <label class="role-option">
 
-                        <option value="job_seeker">
-                            Job Seeker
-                        </option>
+                            <input
+                                type="radio"
+                                name="role"
+                                value="job_seeker"
+                                checked
+                            >
 
-                        <option value="employer">
-                            Employer
-                        </option>
+                            <div class="role-option-content">
 
-                    </select>
+                                <strong>
+                                    Job Seeker
+                                </strong>
+
+                                <small>
+                                    I am looking for a job
+                                </small>
+
+                            </div>
+
+                        </label>
+
+
+                        <label class="role-option">
+
+                            <input
+                                type="radio"
+                                name="role"
+                                value="employer"
+                            >
+
+                            <div class="role-option-content">
+
+                                <strong>
+                                    Employer
+                                </strong>
+
+                                <small>
+                                    I want to post jobs
+                                </small>
+
+                            </div>
+
+                        </label>
+
+                    </div>
 
                 </div>
 
 
-                <!-- Submit -->
+                <!-- TERMS -->
+
+                <label class="terms-checkbox">
+
+                    <input
+                        type="checkbox"
+                        required
+                    >
+
+                    <span>
+                        I agree to the terms and conditions
+                        of Hire Point.
+                    </span>
+
+                </label>
+
+
+                <!-- SUBMIT -->
+
                 <button
                     type="submit"
-                    class="auth-btn"
+                    class="register-button"
                 >
                     Create Account
+                    <span>→</span>
                 </button>
 
             </form>
 
 
-            <div class="auth-footer">
+            <div class="register-login">
 
-                <p>
-                    Already have an account?
-                    <a href="{{ url_for('login') }}">
-                        Login
-                    </a>
-                </p>
+                Already have an account?
+
+                <a href="{{ url_for('login') }}">
+                    Login here
+                </a>
 
             </div>
 
@@ -139,5 +307,881 @@
     </div>
 
 </section>
+
+
+<style>
+
+/* =========================================================
+                    REGISTER PAGE
+========================================================= */
+
+.register-page {
+
+    position: relative;
+
+    min-height: calc(100vh - 72px);
+
+    padding: 70px 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8fafc 0%,
+            #eff6ff 100%
+        );
+
+}
+
+
+/* =========================================================
+                    BACKGROUND
+========================================================= */
+
+.register-background-circle {
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+}
+
+
+.circle-one {
+
+    width: 500px;
+    height: 500px;
+
+    top: -250px;
+    right: -150px;
+
+    background:
+        rgba(37,99,235,0.07);
+
+}
+
+
+.circle-two {
+
+    width: 400px;
+    height: 400px;
+
+    bottom: -220px;
+    left: -180px;
+
+    background:
+        rgba(59,130,246,0.06);
+
+}
+
+
+/* =========================================================
+                    MAIN CONTAINER
+========================================================= */
+
+.register-container {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 0.9fr;
+
+    gap: 60px;
+
+    align-items: center;
+
+}
+
+
+/* =========================================================
+                    LEFT INFORMATION
+========================================================= */
+
+.register-info {
+
+    padding: 20px 0;
+
+}
+
+
+.register-brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 35px;
+
+}
+
+
+.register-logo {
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: white;
+
+    border: 1px solid #dbeafe;
+
+    box-shadow:
+        0 8px 20px rgba(15,23,42,0.08);
+
+}
+
+
+.register-logo img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+}
+
+
+.register-brand h2 {
+
+    color: #0f3d82;
+
+    font-size: 20px;
+
+    line-height: 1;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.register-brand span {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color: #64748b;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+}
+
+
+.register-label {
+
+    color: #2563eb;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.7px;
+
+}
+
+
+.register-info h1 {
+
+    max-width: 600px;
+
+    margin: 12px 0 18px;
+
+    color: #0f172a;
+
+    font-size: clamp(38px, 5vw, 58px);
+
+    line-height: 1.08;
+
+    font-weight: 900;
+
+    letter-spacing: -2px;
+
+}
+
+
+.register-info h1 span {
+
+    display: block;
+
+    color: #2563eb;
+
+}
+
+
+.register-info > p {
+
+    max-width: 570px;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================================================
+                    BENEFITS
+========================================================= */
+
+.register-benefits {
+
+    margin-top: 30px;
+
+    display: grid;
+
+    gap: 14px;
+
+}
+
+
+.register-benefit {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+}
+
+
+.benefit-icon {
+
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #dbeafe;
+
+    color: #2563eb;
+
+    font-size: 13px;
+
+    font-weight: 900;
+
+}
+
+
+.register-benefit strong {
+
+    display: block;
+
+    color: #0f172a;
+
+    font-size: 12px;
+
+    font-weight: 850;
+
+}
+
+
+.register-benefit small {
+
+    display: block;
+
+    margin-top: 2px;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+}
+
+
+/* =========================================================
+                    REGISTER CARD
+========================================================= */
+
+.register-card {
+
+    padding: 35px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 20px 55px rgba(15,23,42,0.10);
+
+}
+
+
+.register-card-header {
+
+    margin-bottom: 25px;
+
+}
+
+
+.register-card-header > span {
+
+    color: #2563eb;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.register-card-header h2 {
+
+    margin: 6px 0 4px;
+
+    color: #0f172a;
+
+    font-size: 28px;
+
+    font-weight: 900;
+
+}
+
+
+.register-card-header p {
+
+    color: #64748b;
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================================
+                    ALERT
+========================================================= */
+
+.register-alert {
+
+    margin-bottom: 18px;
+
+    padding: 11px 13px;
+
+    border-radius: 8px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.register-alert.error {
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
+
+    color: #b91c1c;
+
+}
+
+
+.register-alert.success {
+
+    background: #f0fdf4;
+
+    border: 1px solid #bbf7d0;
+
+    color: #15803d;
+
+}
+
+
+/* =========================================================
+                    FORM
+========================================================= */
+
+.register-form {
+
+    display: grid;
+
+    gap: 17px;
+
+}
+
+
+.register-input-group {
+
+    width: 100%;
+
+}
+
+
+.register-input-group > label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #334155;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+}
+
+
+.register-input {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    height: 48px;
+
+    padding: 0 13px;
+
+    border: 1px solid #dbe3ed;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    transition: 0.2s ease;
+
+}
+
+
+.register-input:focus-within {
+
+    border-color: #60a5fa;
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,0.08);
+
+}
+
+
+.register-input > span {
+
+    font-size: 14px;
+
+    opacity: 0.65;
+
+}
+
+
+.register-input input {
+
+    width: 100%;
+
+    height: 100%;
+
+    border: none;
+
+    outline: none;
+
+    color: #0f172a;
+
+    background: transparent;
+
+    font-size: 12px;
+
+}
+
+
+.register-input input::placeholder {
+
+    color: #94a3b8;
+
+}
+
+
+/* =========================================================
+                    ROLE OPTIONS
+========================================================= */
+
+.role-options {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+}
+
+
+.role-option {
+
+    position: relative;
+
+    display: block;
+
+    cursor: pointer;
+
+}
+
+
+.role-option input {
+
+    position: absolute;
+
+    opacity: 0;
+
+}
+
+
+.role-option-content {
+
+    padding: 13px;
+
+    border: 1px solid #dbe3ed;
+
+    border-radius: 9px;
+
+    transition: 0.2s ease;
+
+}
+
+
+.role-option-content strong {
+
+    display: block;
+
+    color: #334155;
+
+    font-size: 11px;
+
+    font-weight: 850;
+
+}
+
+
+.role-option-content small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+}
+
+
+.role-option input:checked
++ .role-option-content {
+
+    border-color: #2563eb;
+
+    background: #eff6ff;
+
+    box-shadow:
+        0 0 0 2px rgba(37,99,235,0.08);
+
+}
+
+
+.role-option input:checked
++ .role-option-content strong {
+
+    color: #2563eb;
+
+}
+
+
+/* =========================================================
+                    TERMS
+========================================================= */
+
+.terms-checkbox {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 8px;
+
+    cursor: pointer;
+
+}
+
+
+.terms-checkbox input {
+
+    margin-top: 2px;
+
+    accent-color: #2563eb;
+
+}
+
+
+.terms-checkbox span {
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================================
+                    REGISTER BUTTON
+========================================================= */
+
+.register-button {
+
+    width: 100%;
+
+    height: 50px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+    color: white;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 20px rgba(37,99,235,0.20);
+
+    transition: 0.25s ease;
+
+}
+
+
+.register-button span {
+
+    font-size: 17px;
+
+}
+
+
+.register-button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 28px rgba(37,99,235,0.25);
+
+}
+
+
+/* =========================================================
+                    LOGIN LINK
+========================================================= */
+
+.register-login {
+
+    margin-top: 20px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #eef2f7;
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+}
+
+
+.register-login a {
+
+    color: #2563eb;
+
+    font-weight: 800;
+
+}
+
+
+.register-login a:hover {
+
+    text-decoration: underline;
+
+}
+
+
+/* =========================================================
+                    RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .register-container {
+
+        grid-template-columns: 1fr;
+
+        max-width: 600px;
+
+        gap: 30px;
+
+    }
+
+
+    .register-info {
+
+        text-align: center;
+
+    }
+
+
+    .register-brand {
+
+        justify-content: center;
+
+    }
+
+
+    .register-info h1 {
+
+        margin-left: auto;
+
+        margin-right: auto;
+
+    }
+
+
+    .register-info > p {
+
+        margin-left: auto;
+
+        margin-right: auto;
+
+    }
+
+
+    .register-benefits {
+
+        max-width: 400px;
+
+        margin-left: auto;
+
+        margin-right: auto;
+
+        text-align: left;
+
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .register-page {
+
+        padding: 45px 15px;
+
+    }
+
+
+    .register-info h1 {
+
+        font-size: 37px;
+
+        letter-spacing: -1.2px;
+
+    }
+
+
+    .register-info > p {
+
+        font-size: 12px;
+
+    }
+
+
+    .register-card {
+
+        padding: 25px 20px;
+
+        border-radius: 16px;
+
+    }
+
+
+    .register-card-header h2 {
+
+        font-size: 25px;
+
+    }
+
+
+    .role-options {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+</style>
 
 {% endblock %}
