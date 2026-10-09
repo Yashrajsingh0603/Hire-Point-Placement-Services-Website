@@ -1,0 +1,162 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+.applications-page {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 0 22px 50px;
+}
+.applications-header {
+    margin-bottom: 30px;
+}
+.applications-header h1 {
+    font-size: 34px;
+    margin: 8px 0;
+    color: #172554;
+}
+.applications-header p {
+    color: #64748b;
+}
+.application-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+}
+.application-card h2 {
+    margin: 0 0 8px;
+    color: #1e293b;
+    font-size: 21px;
+}
+.application-company {
+    color: #64748b;
+    margin-bottom: 16px;
+}
+.application-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: #475569;
+    font-size: 14px;
+}
+.application-status {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #075985;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-weight: 600;
+}
+.application-link {
+    display: inline-block;
+    margin-top: 18px;
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+.empty-applications {
+    text-align: center;
+    padding: 45px 20px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+}
+.primary-link {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 12px 20px;
+    background: #2563eb;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+@media (max-width: 600px) {
+    .applications-header h1 {
+        font-size: 28px;
+    }
+    .application-card {
+        padding: 18px;
+    }
+}
+</style>
+
+<div class="applications-page">
+
+    <div class="applications-header">
+        <p>YOUR CAREER JOURNEY</p>
+        <h1>My Applications 📄</h1>
+        <p>Track the jobs you have applied for.</p>
+    </div>
+
+    {% if applications %}
+
+        {% for application in applications %}
+        <div class="application-card">
+
+            <h2>{{ application[2] }}</h2>
+
+            <div class="application-company">
+                {{ application[3] }}
+            </div>
+
+            <div class="application-meta">
+                <span>
+                    Application ID: #{{ application[0] }}
+                </span>
+
+                <span class="application-status">
+                    {{ application[4] or "Pending" }}
+                </span>
+
+                {% if application[5] %}
+                <span>
+                    Applied on:
+                    {{ application[5].strftime("%d %b %Y") }}
+                </span>
+                {% endif %}
+            </div>
+
+            <a
+                class="application-link"
+                href="{{ url_for('job_detail', job_id=application[1]) }}"
+            >
+                View Job Details →
+            </a>
+
+        </div>
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty-applications">
+            <h2>No applications yet</h2>
+            <p>
+                Explore available opportunities and apply for
+                a job to see your applications here.
+            </p>
+
+            <a
+                class="primary-link"
+                href="{{ url_for('jobs') }}"
+            >
+                Browse Jobs →
+            </a>
+        </div>
+
+    {% endif %}
+
+    <p>
+        <a href="{{ url_for('dashboard') }}">
+            ← Back to Dashboard
+        </a>
+    </p>
+
+</div>
+
+{% endblock %}

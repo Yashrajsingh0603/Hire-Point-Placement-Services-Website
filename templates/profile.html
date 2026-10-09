@@ -1,0 +1,242 @@
+
+{% extends "base.html" %}
+
+{% block title %}My Profile | Hire Point Placement Services{% endblock %}
+
+{% block content %}
+<style>
+.profile-page {
+    max-width: 1050px;
+    margin: 45px auto;
+    padding: 0 20px 50px;
+    color: #172033;
+}
+.profile-heading { margin-bottom: 25px; }
+.profile-heading h1 { font-size: 32px; margin-bottom: 8px; }
+.profile-heading p { color: #64748b; }
+.profile-layout {
+    display: grid;
+    grid-template-columns: 290px 1fr;
+    gap: 25px;
+    align-items: start;
+}
+.profile-card, .profile-form-card {
+    background: #fff;
+    border: 1px solid #e5eaf1;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 8px 28px rgba(15, 23, 42, .05);
+}
+.profile-card { text-align: center; }
+.profile-avatar {
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e8efff;
+    color: #244fc5;
+    font-size: 40px;
+    font-weight: 700;
+}
+.profile-card h2 { font-size: 21px; overflow-wrap: anywhere; }
+.profile-email { color: #64748b; overflow-wrap: anywhere; }
+.profile-role {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 7px 13px;
+    border-radius: 30px;
+    background: #edf3ff;
+    color: #244fc5;
+    font-size: 13px;
+    font-weight: 600;
+}
+.profile-card a {
+    display: block;
+    margin-top: 22px;
+    color: #244fc5;
+    text-decoration: none;
+    font-weight: 600;
+}
+.profile-form-card h2 { margin: 0 0 8px; font-size: 23px; }
+.profile-form-card > p { color: #64748b; margin-bottom: 25px; }
+.profile-form { display: grid; grid-template-columns: 1fr 1fr; gap: 19px; }
+.profile-field { display: flex; flex-direction: column; gap: 8px; }
+.profile-field.full { grid-column: 1 / -1; }
+.profile-field label { font-size: 14px; font-weight: 600; }
+.profile-field input, .profile-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 13px;
+    border: 1px solid #d7deea;
+    border-radius: 9px;
+    font: inherit;
+    color: #172033;
+    background: #fff;
+}
+.profile-field textarea { min-height: 115px; resize: vertical; }
+.profile-field input:focus, .profile-field textarea:focus {
+    outline: 2px solid #c7d7ff;
+    border-color: #315bd6;
+}
+.profile-help { font-size: 12px; color: #64748b; }
+.profile-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 5px;
+}
+.profile-save {
+    border: 0;
+    border-radius: 9px;
+    padding: 13px 22px;
+    background: #244fc5;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+.profile-save:hover { background: #183da0; }
+.profile-remove { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+@media (max-width: 760px) {
+    .profile-layout { grid-template-columns: 1fr; }
+    .profile-form { grid-template-columns: 1fr; }
+    .profile-field.full, .profile-actions { grid-column: auto; }
+    .profile-heading h1 { font-size: 27px; }
+}
+</style>
+
+<div class="profile-page">
+    <div class="profile-heading">
+        <h1>My Profile</h1>
+        <p>Manage your personal information and account details.</p>
+    </div>
+
+    <div class="profile-layout">
+        <aside class="profile-card">
+            {% if user[8] %}
+                <img
+                    class="profile-avatar"
+                    src="{{ url_for('static', filename='uploads/profiles/' ~ user[8]) }}"
+                    alt="Profile photo"
+                >
+            {% else %}
+                <div class="profile-avatar">
+                    {{ (user[1] or 'U')[0]|upper }}
+                </div>
+            {% endif %}
+
+            <h2>{{ user[1] }}</h2>
+            <p class="profile-email">{{ user[2] }}</p>
+            <span class="profile-role">
+                {{ user[3]|replace('_', ' ')|title }}
+            </span>
+
+            <a href="{{ url_for('home') }}">← Back to homepage</a>
+            <a href="{{ url_for('jobs') }}">Browse available jobs</a>
+        </aside>
+
+        <section class="profile-form-card">
+            <h2>Edit your information</h2>
+            <p>Update your details below and save your changes.</p>
+
+            <form
+                class="profile-form"
+                method="POST"
+                action="{{ url_for('profile') }}"
+                enctype="multipart/form-data"
+            >
+                <div class="profile-field">
+                    <label for="name">Full name *</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        maxlength="120"
+                        value="{{ user[1] or '' }}"
+                        required
+                    >
+                </div>
+
+                <div class="profile-field">
+                    <label for="email">Email address *</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        maxlength="254"
+                        value="{{ user[2] or '' }}"
+                        required
+                    >
+                </div>
+
+                <div class="profile-field">
+                    <label for="phone">Phone number</label>
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        maxlength="30"
+                        value="{{ user[4] or '' }}"
+                    >
+                </div>
+
+                <div class="profile-field">
+                    <label for="location">Location</label>
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        maxlength="150"
+                        value="{{ user[5] or '' }}"
+                        placeholder="e.g. Faridabad, Haryana"
+                    >
+                </div>
+
+                <div class="profile-field full">
+                    <label for="bio">About me</label>
+                    <textarea
+                        id="bio"
+                        name="bio"
+                        maxlength="5000"
+                        placeholder="Write a short introduction about yourself..."
+                    >{{ user[6] or '' }}</textarea>
+                </div>
+
+                <div class="profile-field full">
+                    <label for="profile_photo">Profile photo</label>
+                    <input
+                        type="file"
+                        id="profile_photo"
+                        name="profile_photo"
+                        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                    >
+                    <span class="profile-help">
+                        Optional. JPG, PNG or WEBP; maximum 2 MB.
+                    </span>
+                </div>
+
+                {% if user[8] %}
+                <div class="profile-field full">
+                    <label class="profile-remove">
+                        <input type="checkbox" name="remove_photo" value="1">
+                        Remove my current profile photo
+                    </label>
+                </div>
+                {% endif %}
+
+                <div class="profile-actions">
+                    <button class="profile-save" type="submit">
+                        Save Changes
+                    </button>
+                    <a href="{{ url_for('home') }}">Cancel</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+{% endblock %}

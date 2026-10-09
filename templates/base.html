@@ -1,273 +1,301 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>
-        {% block title %}
-        Hire Point Placement Services
-        {% endblock %}
-    </title>
+    <title>{% block title %}Hire Point Placement Services{% endblock %}</title>
+    <meta name="description" content="Hire Point Placement Services - Find jobs, connect with companies and build your career.">
 
-    <meta
-        name="description"
-        content="Hire Point Placement Services - Find jobs, connect with companies and build your career."
-    >
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+    <style>
+        .account-menu {
+            position: relative;
+        }
 
-    <!-- Main CSS -->
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
+        .account-menu summary {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 6px 10px;
+            border: 1px solid #e5eaf1;
+            border-radius: 10px;
+            background: #fff;
+            color: #172033;
+            cursor: pointer;
+            list-style: none;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .account-menu summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .account-avatar {
+            display: inline-flex;
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 50%;
+            background: #174ea6;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .account-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .account-name {
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .account-arrow {
+            color: #64748b;
+            font-size: 11px;
+        }
+
+        .account-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            z-index: 10001;
+            width: 235px;
+            padding: 9px;
+            background: #fff;
+            border: 1px solid #e5eaf1;
+            border-radius: 13px;
+            box-shadow: 0 15px 40px rgba(15, 23, 42, .14);
+        }
+
+        .account-dropdown-header {
+            padding: 12px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #edf0f5;
+            overflow-wrap: anywhere;
+        }
+
+        .account-dropdown-header strong {
+            display: block;
+            color: #172033;
+            font-size: 14px;
+        }
+
+        .account-dropdown-header span {
+            display: block;
+            margin-top: 3px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .account-dropdown a {
+            display: block;
+            padding: 11px 12px;
+            border-radius: 8px;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .account-dropdown a:hover {
+            color: #174ea6;
+            background: #f1f5ff;
+        }
+
+        .account-dropdown a.account-logout {
+            margin-top: 5px;
+            border-top: 1px solid #edf0f5;
+            color: #b42318;
+        }
+
+        .mobile-account-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 12px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #edf0f5;
+            color: #172033;
+            font-weight: 700;
+        }
+
+        .mobile-register {
+            margin-top: 5px;
+            background: #174ea6;
+            color: #fff !important;
+        }
+
+        @media (max-width: 760px) {
+            .account-menu,
+            .account-dropdown {
+                display: none;
+            }
+        }
+    </style>
 
     {% block extra_css %}{% endblock %}
 </head>
 
 <body>
 
-<!-- =====================================================
-                         NAVBAR
-====================================================== -->
-
 <header class="site-header">
-
     <div class="navbar-container">
 
-        <!-- LOGO -->
         <a href="{{ url_for('home') }}" class="navbar-brand">
-
             <div class="brand-logo">
-                <img
-                    src="{{ url_for('static', filename='images/hirepoint-logo.png.jpeg') }}"
-                    alt="Hire Point Logo"
-                >
+                <img src="{{ url_for('static', filename='images/hirepoint-logo.png.jpeg') }}"
+                     alt="Hire Point Logo">
             </div>
-
             <div class="brand-text">
                 <strong>HIRE POINT</strong>
                 <span>PLACEMENT SERVICES</span>
             </div>
-
         </a>
 
-
-        <!-- DESKTOP NAVIGATION -->
-        <nav class="desktop-nav">
-
-            <a href="{{ url_for('home') }}">
-                Home
-            </a>
-
-            <a href="{{ url_for('jobs') }}">
-                Jobs
-            </a>
-
-            <a href="{{ url_for('home') }}#contact">
-                Contact
-            </a>
-
+        <nav class="desktop-nav" aria-label="Main navigation">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('jobs') }}">Jobs</a>
+            <a href="{{ url_for('home') }}#contact">Contact</a>
 
             {% if session.get('user_id') %}
 
                 {% if session.get('role') == 'admin' %}
-
-                    <a href="{{ url_for('admin_dashboard') }}">
-                        Dashboard
-                    </a>
-
+                    <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
                 {% elif session.get('role') == 'employer' %}
-
-                    <a href="{{ url_for('employer_portal') }}">
-                        Dashboard
-                    </a>
-
+                    <a href="{{ url_for('employer_portal') }}">Dashboard</a>
                 {% else %}
-
-                    <a href="{{ url_for('home') }}">
-                        Dashboard
-                    </a>
-
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
                 {% endif %}
 
-                <a href="{{ url_for('logout') }}" class="nav-login">
-                    Logout
-                </a>
+                <details class="account-menu">
+                    <summary>
+                        <span class="account-avatar">
+                            {% if session.get('profile_photo') %}
+                                <img src="{{ url_for('static', filename='uploads/profiles/' ~ session.get('profile_photo')) }}"
+                                     alt="Profile photo">
+                            {% else %}
+                                {{ (session.get('user_name') or 'U')[0]|upper }}
+                            {% endif %}
+                        </span>
+                        <span class="account-name">{{ session.get('user_name') or 'My Account' }}</span>
+                        <span class="account-arrow" aria-hidden="true">▼</span>
+                    </summary>
+
+                    <div class="account-dropdown">
+                        <div class="account-dropdown-header">
+                            <strong>{{ session.get('user_name') or 'User' }}</strong>
+                            <span>{{ session.get('email') or '' }}</span>
+                        </div>
+
+                        <a href="{{ url_for('profile') }}">My Profile</a>
+                        <a href="{{ url_for('logout') }}" class="account-logout">Logout</a>
+                    </div>
+                </details>
 
             {% else %}
-
-                <a href="{{ url_for('login') }}" class="nav-login">
-                    Login
-                </a>
-
-                <a href="{{ url_for('register') }}" class="nav-register">
-                    Register
-                </a>
-
+                <a href="{{ url_for('login') }}" class="nav-login">Login</a>
+                <a href="{{ url_for('register') }}" class="nav-register">Register</a>
             {% endif %}
-
         </nav>
 
-
-        <!-- MOBILE MENU BUTTON -->
-        <button
-            class="mobile-menu-button"
-            id="mobileMenuButton"
-            type="button"
-            aria-label="Open navigation menu"
-        >
+        <button class="mobile-menu-button"
+                id="mobileMenuButton"
+                type="button"
+                aria-label="Toggle navigation menu"
+                aria-expanded="false"
+                aria-controls="mobileNav">
             <span></span>
             <span></span>
             <span></span>
         </button>
-
     </div>
 
-
-    <!-- MOBILE NAVIGATION -->
-    <div class="mobile-nav" id="mobileNav">
-
-        <a href="{{ url_for('home') }}">
-            Home
-        </a>
-
-        <a href="{{ url_for('jobs') }}">
-            Jobs
-        </a>
-
-        <a href="{{ url_for('home') }}#contact">
-            Contact
-        </a>
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('jobs') }}">Jobs</a>
+        <a href="{{ url_for('home') }}#contact">Contact</a>
 
         {% if session.get('user_id') %}
 
+            <div class="mobile-account-heading">
+                <span class="account-avatar">
+                    {% if session.get('profile_photo') %}
+                        <img src="{{ url_for('static', filename='uploads/profiles/' ~ session.get('profile_photo')) }}"
+                             alt="Profile photo">
+                    {% else %}
+                        {{ (session.get('user_name') or 'U')[0]|upper }}
+                    {% endif %}
+                </span>
+                <span>{{ session.get('user_name') or 'My Account' }}</span>
+            </div>
+
             {% if session.get('role') == 'admin' %}
-
-                <a href="{{ url_for('admin_dashboard') }}">
-                    Dashboard
-                </a>
-
+                <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
             {% elif session.get('role') == 'employer' %}
-
-                <a href="{{ url_for('employer_portal') }}">
-                    Dashboard
-                </a>
-
+                <a href="{{ url_for('employer_portal') }}">Employer Dashboard</a>
+            {% else %}
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
             {% endif %}
 
-            <a href="{{ url_for('logout') }}">
-                Logout
-            </a>
+            <a href="{{ url_for('profile') }}">My Profile</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
 
         {% else %}
-
-            <a href="{{ url_for('login') }}">
-                Login
-            </a>
-
-            <a href="{{ url_for('register') }}" class="mobile-register">
-                Register
-            </a>
-
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('register') }}" class="mobile-register">Register</a>
         {% endif %}
-
-    </div>
-
+    </nav>
 </header>
 
-
-<!-- =====================================================
-                      FLASH MESSAGES
-====================================================== -->
-
 {% with messages = get_flashed_messages(with_categories=true) %}
-
     {% if messages %}
-
         <div class="flash-container">
-
             {% for category, message in messages %}
-
                 <div class="flash-message {{ category }}">
-
-                    <span>
-                        {{ message }}
-                    </span>
-
-                    <button
-                        type="button"
-                        onclick="this.parentElement.remove()"
-                        aria-label="Close message"
-                    >
-                        ×
-                    </button>
-
+                    <span>{{ message }}</span>
+                    <button type="button"
+                            onclick="this.parentElement.remove()"
+                            aria-label="Close message">×</button>
                 </div>
-
             {% endfor %}
-
         </div>
-
     {% endif %}
-
 {% endwith %}
 
-
-<!-- =====================================================
-                       PAGE CONTENT
-====================================================== -->
-
 <main>
-
-    {% block content %}
-    {% endblock %}
-
+    {% block content %}{% endblock %}
 </main>
 
-
-<!-- =====================================================
-                         FOOTER
-====================================================== -->
-
 <footer class="site-footer">
-
     <div class="footer-container">
 
-
-        <!-- BRAND -->
         <div class="footer-column footer-brand-column">
-
             <div class="footer-brand">
-
                 <div class="footer-logo">
-
-                    <img
-                        src="{{ url_for('static', filename='images/hirepoint-logo.png.jpeg') }}"
-                        alt="Hire Point Logo"
-                    >
-
+                    <img src="{{ url_for('static', filename='images/hirepoint-logo.png.jpeg') }}"
+                         alt="Hire Point Logo">
                 </div>
-
                 <div>
-
                     <h3>HIRE POINT</h3>
-
-                    <span>
-                        PLACEMENT SERVICES
-                    </span>
-
+                    <span>PLACEMENT SERVICES</span>
                 </div>
-
             </div>
 
             <p>
@@ -275,140 +303,68 @@
                 opportunities and helping businesses find the
                 right talent.
             </p>
-
         </div>
 
-
-        <!-- QUICK LINKS -->
         <div class="footer-column">
-
             <h4>Quick Links</h4>
-
-            <a href="{{ url_for('home') }}">
-                Home
-            </a>
-
-            <a href="{{ url_for('jobs') }}">
-                Find Jobs
-            </a>
-
-            <a href="{{ url_for('register') }}">
-                Register
-            </a>
-
-            <a href="{{ url_for('login') }}">
-                Login
-            </a>
-
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('jobs') }}">Find Jobs</a>
+            <a href="{{ url_for('register') }}">Register</a>
+            <a href="{{ url_for('login') }}">Login</a>
         </div>
 
-
-        <!-- SERVICES -->
         <div class="footer-column">
-
             <h4>Services</h4>
-
-            <a href="{{ url_for('jobs') }}">
-                Job Search
-            </a>
-
-            <a href="{{ url_for('register') }}">
-                Career Opportunities
-            </a>
-
-            <a href="{{ url_for('home') }}#contact">
-                Contact Us
-            </a>
-
+            <a href="{{ url_for('jobs') }}">Job Search</a>
+            <a href="{{ url_for('register') }}">Career Opportunities</a>
+            <a href="{{ url_for('home') }}#contact">Contact Us</a>
         </div>
 
-
-        <!-- CONTACT -->
         <div class="footer-column footer-contact-column">
-
             <h4>Contact Us</h4>
-
-            <p>
-                <strong>Harsh Nagar</strong>
-            </p>
-
-            <a href="mailto:nagarharsh21@gmail.com">
-                nagarharsh21@gmail.com
-            </a>
-
-            <a href="tel:+918700284930">
-                +91 87002 84930
-            </a>
-
+            <p><strong>Harsh Nagar</strong></p>
+            <a href="mailto:nagarharsh21@gmail.com">nagarharsh21@gmail.com</a>
+            <a href="tel:+918700284930">+91 87002 84930</a>
         </div>
 
     </div>
-
-
-    <!-- FOOTER BOTTOM -->
 
     <div class="footer-bottom">
-
-        <div>
-
-            © 2026 Hire Point Placement Services.
-            All rights reserved.
-
-        </div>
-
-        <div>
-            Built for better careers.
-        </div>
-
+        <div>© 2026 Hire Point Placement Services. All rights reserved.</div>
+        <div>Built for better careers.</div>
     </div>
-
 </footer>
 
-
-<!-- =====================================================
-                     MOBILE MENU JS
-====================================================== -->
-
 <script>
-
-    const mobileMenuButton =
-        document.getElementById("mobileMenuButton");
-
-    const mobileNav =
-        document.getElementById("mobileNav");
-
+    const mobileMenuButton = document.getElementById("mobileMenuButton");
+    const mobileNav = document.getElementById("mobileNav");
 
     if (mobileMenuButton && mobileNav) {
-
         mobileMenuButton.addEventListener("click", function () {
-
-            mobileNav.classList.toggle("active");
-
-            mobileMenuButton.classList.toggle("active");
-
+            const isOpen = mobileNav.classList.toggle("active");
+            mobileMenuButton.classList.toggle("active", isOpen);
+            mobileMenuButton.setAttribute("aria-expanded", String(isOpen));
         });
 
-
-        const mobileLinks =
-            mobileNav.querySelectorAll("a");
-
-
-        mobileLinks.forEach(function(link) {
-
-            link.addEventListener("click", function() {
-
+        mobileNav.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
                 mobileNav.classList.remove("active");
-
                 mobileMenuButton.classList.remove("active");
-
+                mobileMenuButton.setAttribute("aria-expanded", "false");
             });
-
         });
-
     }
 
+    document.querySelectorAll(".account-menu").forEach(function (menu) {
+        menu.addEventListener("toggle", function () {
+            if (menu.open) {
+                document.querySelectorAll(".account-menu").forEach(function (other) {
+                    if (other !== menu) other.open = false;
+                });
+            }
+        });
+    });
 </script>
-
 
 {% block extra_js %}{% endblock %}
 

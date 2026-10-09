@@ -147,24 +147,28 @@
 
             <div class="form-group">
                 <label for="name">Your Name</label>
-
-                <input
-                    type="text"
-                    id="name"
-                    value="{{ session.get('user_name') }}"
-                    readonly
+<input
+    type="text"
+    id="name"
+    name="name"
+    value="{{ session.get('user_name', '') }}"
+    placeholder="Enter your full name"
+    required
+>
                 >
             </div>
 
             <div class="form-group">
                 <label for="email">Email Address</label>
-
-                <input
-                    type="email"
-                    id="email"
-                    value="{{ session.get('user_email') }}"
-                    readonly
-                >
+<input
+    type="email"
+    id="email"
+    name="email"
+    value="{{ session.get('user_email', session.get('email', '')) }}"
+    placeholder="Enter your email address"
+    required
+>
+            
             </div>
 
             <div class="form-group">

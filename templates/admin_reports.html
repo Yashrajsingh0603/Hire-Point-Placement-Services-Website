@@ -1,0 +1,194 @@
+
+{% extends "base.html" %}
+
+{% block title %}Job Reports | Admin | Hire Point{% endblock %}
+
+{% block extra_css %}
+<style>
+    .reports-page {
+        max-width: 1250px;
+        margin: 40px auto;
+        padding: 0 20px 45px;
+    }
+
+    .reports-heading {
+        margin-bottom: 25px;
+    }
+
+    .reports-heading h1 {
+        margin: 0 0 8px;
+        color: #172033;
+        font-size: 30px;
+    }
+
+    .reports-heading p {
+        color: #64748b;
+        line-height: 1.6;
+    }
+
+    .reports-table-wrap {
+        overflow-x: auto;
+        background: #fff;
+        border: 1px solid #e5eaf1;
+        border-radius: 14px;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, .05);
+    }
+
+    .reports-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 850px;
+    }
+
+    .reports-table th,
+    .reports-table td {
+        padding: 15px;
+        border-bottom: 1px solid #edf0f5;
+        text-align: left;
+        vertical-align: top;
+        font-size: 13px;
+    }
+
+    .reports-table th {
+        background: #f7f9fc;
+        color: #475569;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .reports-table td {
+        color: #334155;
+        line-height: 1.6;
+    }
+
+    .report-reason {
+        font-weight: 700;
+        color: #172033;
+    }
+
+    .report-status {
+        display: inline-block;
+        padding: 5px 9px;
+        border-radius: 20px;
+        background: #fff4d6;
+        color: #875b00;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .report-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        min-width: 125px;
+    }
+
+    .report-actions select {
+        max-width: 140px;
+        padding: 8px;
+        border: 1px solid #d8e0eb;
+        border-radius: 7px;
+        background: #fff;
+    }
+
+    .report-actions button,
+    .report-actions a {
+        display: inline-block;
+        padding: 8px 11px;
+        border: 0;
+        border-radius: 7px;
+        background: #174ea6;
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .report-actions .delete-report {
+        background: #fff0ef;
+        color: #b42318;
+    }
+
+    .empty-reports {
+        padding: 35px;
+        text-align: center;
+        color: #64748b;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="reports-page">
+    <div class="reports-heading">
+        <h1>Job Reports</h1>
+        <p>Review complaints submitted by users and update their status.</p>
+    </div>
+
+    <div class="reports-table-wrap">
+        {% if reports %}
+        <table class="reports-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Job</th>
+                    <th>Reported By</th>
+                    <th>Reason & Details</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in reports %}
+                <tr>
+                    <td>{{ report[0] }}</td>
+                    <td>
+                        <strong>{{ report[1] or 'Job unavailable' }}</strong>
+                    </td>
+                    <td>
+                        {{ report[2] or 'Unknown user' }}<br>
+                        {{ report[3] or '' }}
+                    </td>
+                    <td>
+                        <div class="report-reason">{{ report[4] }}</div>
+                        <div>{{ report[5] or 'No additional details' }}</div>
+                    </td>
+                    <td>{{ report[6] }}</td>
+                    <td>
+                        <span class="report-status">{{ report[7] }}</span>
+                    </td>
+                    <td>
+                        <div class="report-actions">
+                            <form method="POST"
+                                  action="{{ url_for('admin_update_report', report_id=report[0]) }}">
+                                <select name="status" required>
+                                    <option value="Pending" {% if report[7] == 'Pending' %}selected{% endif %}>Pending</option>
+                                    <option value="Under Review" {% if report[7] == 'Under Review' %}selected{% endif %}>Under Review</option>
+                                    <option value="Resolved" {% if report[7] == 'Resolved' %}selected{% endif %}>Resolved</option>
+                                    <option value="Dismissed" {% if report[7] == 'Dismissed' %}selected{% endif %}>Dismissed</option>
+                                </select>
+                                <button type="submit">Update Status</button>
+                            </form>
+
+                            <form method="POST"
+                                  action="{{ url_for('admin_delete_report', report_id=report[0]) }}"
+                                  onsubmit="return confirm('Delete this report permanently?');">
+                                <button type="submit" class="delete-report">Delete Report</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-reports">
+            <h3>No reports yet</h3>
+            <p>Job reports submitted by users will appear here.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

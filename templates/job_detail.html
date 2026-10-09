@@ -686,6 +686,44 @@
 
             </div>
 
+<!-- ================= REPORT THIS JOB ================= -->
+
+<section class="card">
+    <h2>🚩 Report This Job</h2>
+
+    <p class="description" style="margin-bottom: 18px;">
+        Is job listing mein fake information, scam ya koi aur problem hai?
+        Report submit karo, taaki admin team ise review kar sake.
+    </p>
+
+    {% if session.get("user_id") %}
+
+        <a href="{{ url_for('report_job', job_id=job[0]) }}"
+           style="
+               display: inline-block;
+               padding: 12px 20px;
+               background: #fff0ef;
+               color: #b42318;
+               border: 1px solid #fecaca;
+               border-radius: 8px;
+               font-weight: 700;
+               text-decoration: none;
+           ">
+            🚩 Report Job
+        </a>
+
+    {% else %}
+
+        <p class="description">
+            <a href="{{ url_for('login', next=request.path) }}"
+               style="color: #2563eb; font-weight: 700;">
+                Login
+            </a>
+            to report this job.
+        </p>
+
+    {% endif %}
+</section>
 
             <!-- ================= RIGHT ================= -->
 
@@ -705,13 +743,11 @@
                     </p>
 
                     {% if session.get("user_id") %}
-
-                        <a
-                            href="{{ url_for('apply', job_id=job[0]) }}"
-                            class="apply-btn"
-                        >
-                            Apply for this Job
-                        </a>
+<form action="{{ url_for('apply', job_id=job[0]) }}" method="POST">
+    <button type="submit" class="apply-btn">
+        Apply for this Job
+    </button>
+</form>
 
                     {% else %}
 

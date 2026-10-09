@@ -1,0 +1,225 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}Report a Job | Hire Point Placement Services{% endblock %}
+
+{% block extra_css %}
+<style>
+    .report-page {
+        max-width: 800px;
+        margin: 45px auto;
+        padding: 0 20px;
+    }
+
+    .report-card {
+        padding: 32px;
+        background: #fff;
+        border: 1px solid #e5eaf1;
+        border-radius: 18px;
+        box-shadow: 0 12px 35px rgba(15, 23, 42, 0.07);
+    }
+
+    .report-card h1 {
+        margin: 0 0 10px;
+        color: #172033;
+        font-size: 30px;
+    }
+
+    .report-intro {
+        margin-bottom: 25px;
+        color: #64748b;
+        line-height: 1.7;
+    }
+
+    .report-job-info {
+        padding: 16px;
+        margin-bottom: 24px;
+        border-radius: 12px;
+        background: #f3f6fc;
+    }
+
+    .report-job-info strong {
+        display: block;
+        margin-bottom: 7px;
+        color: #172033;
+        font-size: 17px;
+    }
+
+    .report-job-info span {
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .report-form label {
+        display: block;
+        margin: 20px 0 9px;
+        color: #172033;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .report-form select,
+    .report-form textarea {
+        box-sizing: border-box;
+        display: block;
+        width: 100%;
+        padding: 14px;
+        border: 1px solid #d8e0eb;
+        border-radius: 10px;
+        background: #fff;
+        color: #172033;
+        font: inherit;
+    }
+
+    .report-form textarea {
+        min-height: 240px;
+        resize: vertical;
+        line-height: 1.7;
+    }
+
+    .report-form select:focus,
+    .report-form textarea:focus {
+        outline: 2px solid #c7d9ff;
+        border-color: #174ea6;
+    }
+
+    .report-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 24px;
+    }
+
+    .report-submit,
+    .report-cancel {
+        display: inline-block;
+        padding: 13px 20px;
+        border: 0;
+        border-radius: 9px;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .report-submit {
+        background: #174ea6;
+        color: #fff;
+    }
+
+    .report-submit:hover {
+        background: #123d83;
+    }
+
+    .report-cancel {
+        background: #eef2f7;
+        color: #334155;
+    }
+
+    .report-note {
+        margin-top: 16px;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+        .report-page {
+            margin: 25px auto;
+            padding: 0 12px;
+        }
+
+        .report-card {
+            padding: 22px 18px;
+        }
+
+        .report-card h1 {
+            font-size: 25px;
+        }
+
+        .report-form textarea {
+            min-height: 200px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="report-page">
+    <div class="report-card">
+
+        <h1>Report a Job / Submit a Complaint</h1>
+
+        <p class="report-intro">
+            Found a suspicious job, misleading information, an employer
+            issue, or another concern? Describe the problem below.
+            Our administration team can review your report.
+        </p>
+
+        <div class="report-job-info">
+            <strong>{{ job[1] }}</strong>
+            <span>
+                {{ job[2] }}
+                {% if job[3] %} · {{ job[3] }}{% endif %}
+            </span>
+        </div>
+
+        <form class="report-form"
+              method="POST"
+              action="{{ url_for('report_job', job_id=job[0]) }}">
+
+            <label for="reason">Complaint category *</label>
+
+            <select id="reason" name="reason" required>
+                <option value="">Select a complaint category</option>
+                <option value="Scam or fraudulent job">
+                    Scam or fraudulent job
+                </option>
+                <option value="Misleading information">
+                    Misleading information
+                </option>
+                <option value="Inappropriate or abusive content">
+                    Inappropriate or abusive content
+                </option>
+                <option value="Duplicate job listing">
+                    Duplicate job listing
+                </option>
+                <option value="Suspicious employer">
+                    Suspicious employer
+                </option>
+                <option value="Other">Other complaint</option>
+            </select>
+
+            <label for="description">Describe your complaint *</label>
+
+            <textarea
+                id="description"
+                name="description"
+                minlength="10"
+                maxlength="5000"
+                placeholder="Write your complaint here. Explain what happened and include any relevant details..."
+                required
+            ></textarea>
+
+            <p class="report-note">
+                You can write up to 5,000 characters. Please provide
+                accurate information and do not include passwords or
+                other sensitive personal information.
+            </p>
+
+            <div class="report-actions">
+                <button type="submit" class="report-submit">
+                    Post Report
+                </button>
+
+                <a href="{{ url_for('job_detail', job_id=job[0]) }}"
+                   class="report-cancel">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+    </div>
+</section>
+{% endblock %}
+```
